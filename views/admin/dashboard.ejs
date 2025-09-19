@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <meta name="description" content="Admin dashboard for Tahoe Night Nurse">
+    
+    <!-- Google Fonts - Lato -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Lato', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Lato', system-ui, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <div class="w-64 bg-navy-800 text-white">
+            <div class="p-6">
+                <h1 class="text-xl font-semibold text-white">TNN Admin</h1>
+            </div>
+            
+            <nav class="mt-6">
+                <a href="/admin" class="flex items-center px-6 py-3 text-white bg-navy-700 border-r-4 border-blue-500">
+                    <span>Dashboard</span>
+                </a>
+                <a href="/admin/parents" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
+                    <span>Parent Leads</span>
+                </a>
+                <a href="/admin/caregivers" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
+                    <span>Caregivers</span>
+                </a>
+                <a href="/" target="_blank" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
+                    <span>View Site</span>
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="flex-1">
+            <div class="p-8">
+                <h1 class="text-3xl font-light text-gray-800 mb-8">Dashboard</h1>
+                
+                <!-- Stats Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                    <!-- Total Parents -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-3xl font-light text-blue-600 mb-2"><%= stats.totalParents || 0 %></div>
+                        <div class="text-gray-600 font-medium">Total Parents</div>
+                        <div class="text-sm text-gray-500 mt-1"><%= stats.parentsThisWeek || 0 %> this week</div>
+                    </div>
+                    
+                    <!-- Total Caregivers -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-3xl font-light text-blue-600 mb-2"><%= stats.totalCaregivers || 0 %></div>
+                        <div class="text-gray-600 font-medium">Total Caregivers</div>
+                        <div class="text-sm text-gray-500 mt-1"><%= stats.caregiversThisWeek || 0 %> this week</div>
+                    </div>
+                    
+                    <!-- Supply/Demand Ratio -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-3xl font-light text-green-600 mb-2"><%= stats.supplyDemandRatio || 0 %>%</div>
+                        <div class="text-gray-600 font-medium">Supply/Demand Ratio</div>
+                        <div class="text-sm text-gray-500 mt-1">Caregiver availability</div>
+                    </div>
+                    
+                    <!-- Total Submissions -->
+                    <div class="bg-white rounded-lg shadow-sm p-6">
+                        <div class="text-3xl font-light text-purple-600 mb-2"><%= stats.totalSubmissions || 0 %></div>
+                        <div class="text-gray-600 font-medium">Total Submissions</div>
+                        <div class="text-sm text-gray-500 mt-1">All time</div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- Recent Parent Leads -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-medium text-gray-800">Recent Parent Leads</h2>
+                                <a href="/admin/parents" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th class="pb-3">Date</th>
+                                            <th class="pb-3">Name</th>
+                                            <th class="pb-3">Location</th>
+                                            <th class="pb-3">Timeframe</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <% if (recentParents && recentParents.length > 0) { %>
+                                            <% recentParents.forEach(parent => { %>
+                                            <tr class="border-t border-gray-100">
+                                                <td class="py-3 text-gray-600"><%= parent.created_at_formatted %></td>
+                                                <td class="py-3 font-medium text-gray-900"><%= parent.first_name %> <%= parent.last_name %></td>
+                                                <td class="py-3 text-gray-600"><%= parent.location %></td>
+                                                <td class="py-3 text-gray-600"><%= parent.timeframe %></td>
+                                            </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                        <tr>
+                                            <td colspan="4" class="py-8 text-center text-gray-500">No parent leads yet</td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recent Caregiver Applications -->
+                    <div class="bg-white rounded-lg shadow-sm">
+                        <div class="p-6 border-b border-gray-200">
+                            <div class="flex justify-between items-center">
+                                <h2 class="text-xl font-medium text-gray-800">Recent Caregiver Applications</h2>
+                                <a href="/admin/caregivers" class="text-blue-600 hover:text-blue-700 text-sm font-medium">View All</a>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <div class="overflow-x-auto">
+                                <table class="w-full">
+                                    <thead>
+                                        <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            <th class="pb-3">Date</th>
+                                            <th class="pb-3">Name</th>
+                                            <th class="pb-3">Experience</th>
+                                            <th class="pb-3">Regions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="text-sm">
+                                        <% if (recentCaregivers && recentCaregivers.length > 0) { %>
+                                            <% recentCaregivers.forEach(caregiver => { %>
+                                            <tr class="border-t border-gray-100">
+                                                <td class="py-3 text-gray-600"><%= caregiver.created_at_formatted %></td>
+                                                <td class="py-3 font-medium text-gray-900"><%= caregiver.first_name %> <%= caregiver.last_name %></td>
+                                                <td class="py-3 text-gray-600"><%= caregiver.experience_years %> years</td>
+                                                <td class="py-3 text-gray-600"><%= caregiver.service_areas %></td>
+                                            </tr>
+                                            <% }); %>
+                                        <% } else { %>
+                                        <tr>
+                                            <td colspan="4" class="py-8 text-center text-gray-500">No caregiver applications yet</td>
+                                        </tr>
+                                        <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

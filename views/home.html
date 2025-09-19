@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home | Tahoe Night Nurse</title>
+    <meta name="description" content="Trusted overnight newborn care for Lake Tahoe families. Join our interest list or apply as a caregiver.">
+    
+    <!-- Google Fonts - Lato -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Lato', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Analytics -->
+    <script defer data-domain="tahoenightnurse.com" src="https://plausible.io/js/script.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Lato', system-ui, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+    <div class="min-h-screen flex flex-col">
+        <!-- Main Content -->
+        <main class="flex-1">
+            <!-- Hero Section -->
+            <section class="bg-navy-900 text-white py-16 md:py-24 relative overflow-hidden">
+                <!-- Whimsical floating elements -->
+                <div class="absolute inset-0 pointer-events-none">
+                    <!-- Floating stars -->
+                    <div class="absolute top-20 left-10 text-amber-300 opacity-60 animate-pulse">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                        </svg>
+                    </div>
+                    <div class="absolute top-32 right-16 text-amber-200 opacity-40 animate-ping" style="animation-delay: 1s;">
+                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                        </svg>
+                    </div>
+                    <div class="absolute bottom-24 left-20 text-amber-400 opacity-50 animate-pulse" style="animation-delay: 2s;">
+                        <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Floating geometric shapes - dramatically varied sizes -->
+                    <div class="absolute top-16 right-8 w-2 h-2 bg-amber-300 rounded-full opacity-30" style="animation: bounce 3s infinite; animation-delay: 0.5s;"></div>
+                    <div class="absolute bottom-32 right-12 w-12 h-12 bg-amber-200 rounded-full opacity-15" style="animation: pulse 4s infinite; animation-delay: 1.5s;"></div>
+                    <div class="absolute top-40 left-1/4 w-1 h-1 bg-amber-400 rounded-full opacity-50 animate-ping" style="animation-delay: 3s;"></div>
+                    <div class="absolute top-60 right-1/3 w-8 h-8 bg-amber-300 rounded-full opacity-25" style="animation: pulse 5s infinite; animation-delay: 4s;"></div>
+                    <div class="absolute bottom-40 left-16 w-16 h-16 bg-amber-400 rounded-full opacity-10" style="animation: bounce 6s infinite; animation-delay: 2.5s;"></div>
+                    <div class="absolute top-72 left-8 w-3 h-3 bg-amber-200 rounded-full opacity-40" style="animation: pulse 3.5s infinite; animation-delay: 1s;"></div>
+                    
+                    <!-- Abstract half moon/crescent shapes -->
+                    <div class="absolute top-24 left-1/3 opacity-25" style="animation: pulse 4s infinite; animation-delay: 1.2s;">
+                        <svg class="w-5 h-5 text-amber-300" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="absolute bottom-20 right-8 opacity-30" style="animation: bounce 5s infinite; animation-delay: 2.8s;">
+                        <svg class="w-14 h-14 text-amber-200" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                        </svg>
+                    </div>
+                    <div class="absolute top-36 right-20 opacity-15" style="animation: pulse 6s infinite; animation-delay: 3.5s;">
+                        <svg class="w-20 h-20 text-amber-400" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Abstract curved lines -->
+                    <div class="absolute bottom-16 right-1/4 opacity-15 animate-pulse" style="animation-delay: 4.2s;">
+                        <svg class="w-20 h-10 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12c0-1.657 4.03-3 9-3s9 1.343 9 3-4.03 3-9 3-9-1.343-9-3z"/>
+                        </svg>
+                    </div>
+                    <div class="absolute top-28 left-8 opacity-25 animate-bounce" style="animation-delay: 1.8s;">
+                        <svg class="w-12 h-6 text-amber-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12c0 4.4-3.6 8-8 8s-8-3.6-8-8"/>
+                        </svg>
+                    </div>
+                </div>
+                
+                <div class="max-w-4xl mx-auto px-6 text-center relative z-10">
+                    <h1 class="text-4xl md:text-5xl font-semibold mb-6 leading-tight">
+                        Finally: Trusted Overnight Newborn Care for North Lake Tahoe & Truckee
+                    </h1>
+                    <p class="text-xl md:text-2xl text-navy-200 mb-8 leading-relaxed">
+                        We get it—finding someone to care for your tiny human at 3am is terrifying. That's why we're building a community of vetted, CPR-certified specialists right here in Tahoe and Truckee.
+                    </p>
+                    
+                    <!-- Coming Soon Indicator -->
+                    <div class="mb-8">
+                        <span class="text-navy-200 text-lg font-light">
+                            <span class="border-b-2 border-amber-500">Coming Soon</span>
+                        </span>
+                    </div>
+                    
+                    <!-- Primary CTAs -->
+                    <div class="flex flex-col sm:flex-row gap-4 justify-center">
+                        <a href="/parents" class="inline-block bg-amber-500 text-navy-900 font-semibold px-8 py-4 rounded-lg text-lg hover:bg-amber-400 transition-colors min-h-[56px] flex items-center justify-center min-w-[200px]">
+                            I'm a parent
+                        </a>
+                        <a href="/caregivers" class="inline-block border-2 border-white text-white font-semibold px-8 py-4 rounded-lg text-lg hover:bg-white hover:text-navy-900 transition-colors min-h-[56px] flex items-center justify-center min-w-[200px]">
+                            I'm a night nurse
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Value Props -->
+            <section class="py-16 md:py-20 bg-gray-50">
+                <div class="max-w-6xl mx-auto px-6">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl md:text-4xl font-light mb-4 text-navy-800">Professional care you can trust</h2>
+                        <p class="text-lg text-gray-600 max-w-3xl mx-auto">We understand the unique challenges of finding reliable overnight childcare in our Lake Tahoe mountain community.</p>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                        <div class="text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transform rotate-3 hover:rotate-0 transition-transform duration-300">
+                                <svg class="w-10 h-10 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-light mb-4 text-navy-800">Rigorous Background Checks</h3>
+                            <p class="text-gray-600">We do the homework so you don't have to (you're busy enough).</p>
+                        </div>
+                        
+                        <div class="text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-navy-600 to-navy-800 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transform -rotate-2 hover:rotate-0 transition-transform duration-300">
+                                <svg class="w-10 h-10 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-light mb-4 text-navy-800">CPR & Infant Care Certified</h3>
+                            <p class="text-gray-600">Our caregivers know their stuff (and can handle tiny emergencies like pros).</p>
+                        </div>
+                        
+                        <div class="text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-amber-300 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transform rotate-2 hover:rotate-0 transition-transform duration-300">
+                                <svg class="w-10 h-10 text-navy-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-light mb-4 text-navy-800">Newborn & Infant Focus</h3>
+                            <p class="text-gray-600">Tiny humans are our specialty. We speak fluent baby (and exhausted parent).</p>
+                        </div>
+                        
+                        <div class="text-center transform hover:scale-105 transition-transform duration-300">
+                            <div class="w-20 h-20 bg-gradient-to-br from-navy-700 to-navy-900 rounded-full flex items-center justify-center mx-auto mb-6 shadow-md transform -rotate-1 hover:rotate-0 transition-transform duration-300">
+                                <svg class="w-10 h-10 text-amber-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-xl font-light mb-4 text-navy-800">Local Coverage</h3>
+                            <p class="text-gray-600">Tahoe, Truckee, and everywhere in between (mountain traffic included).</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Trust Building Section -->
+            <section class="py-16 md:py-20 bg-navy-900">
+                <div class="max-w-6xl mx-auto px-6">
+                    <!-- Image -->
+                    <div class="mb-12">
+                        <img 
+                            src="/baby-photo.jpg" 
+                            alt="Happy mother holding her baby outdoors" 
+                            class="w-full h-64 md:h-80 object-cover rounded-2xl shadow-xl"
+                            style="object-position: 65% 55%;"
+                        >
+                    </div>
+                    
+                    <!-- Content -->
+                    <div class="text-center text-white">
+                        <h2 class="text-2xl md:text-3xl lg:text-4xl font-light mb-6 leading-tight">
+                            Sleep deprivation is the #1 challenge for new parents. Our mission is simple: to help Tahoe families rest, recover, and thrive with the confidence that your baby is cared for by professionals. Founded by local parents, who get it.
+                        </h2>
+                    </div>
+                </div>
+            </section>
+
+            <!-- FAQ Section -->
+            <section class="py-16 md:py-20 bg-white">
+                <div class="max-w-4xl mx-auto px-6">
+                    <div class="text-center mb-12">
+                        <h2 class="text-3xl font-light mb-4 text-navy-800">FAQ</h2>
+                        <p class="text-lg text-gray-600">Everything you need to know about our upcoming night nurse service</p>
+                    </div>
+                    
+                    <div class="space-y-4">
+                        <!-- FAQ Item 1 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none rounded-lg faq-button" onclick="toggleFAQ('faq1')">
+                                <span class="text-lg font-medium text-navy-800">What exactly is a night nurse service?</span>
+                                <svg id="faq1-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq1" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">A night nurse service provides specialized overnight care for your newborn or infant while you get much-needed sleep. Our CPR-certified specialists handle nighttime feedings, diaper changes, soothing, and basic newborn care during the overnight hours. They keep track of feedings and changes so you're not left guessing what happened overnight. This service is designed to help new parents recover physically and emotionally during the demanding early months, following your parenting preferences and baby's natural rhythms.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 2 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq2')">
+                                <span class="text-lg font-medium text-navy-800">When will your service be available in North Lake Tahoe & Truckee?</span>
+                                <svg id="faq2-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq2" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">Our service will be available starting Fall 2025. We're currently building our team of certified specialists to ensure we can provide the highest quality care when we launch.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 3 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq3')">
+                                <span class="text-lg font-medium text-navy-800">What qualifications will your night nurses have?</span>
+                                <svg id="faq3-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq3" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">All of our night specialists will be CPR-certified, extensively background-checked, and experienced in newborn care. We require professional childcare experience, specialized training in newborn care, and excellent references. Our rigorous vetting process ensures only the most qualified, trustworthy professionals join our team.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 4 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq4')">
+                                <span class="text-lg font-medium text-navy-800">What ages will you provide care for?</span>
+                                <svg id="faq4-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq4" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">We specialize in caring for babies from newborn to 12 months. Our primary focus is on the critical early months when nighttime support makes the biggest difference for new parents.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 5 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq5')">
+                                <span class="text-lg font-medium text-navy-800">What will your general rates be?</span>
+                                <svg id="faq5-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq5" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">Our service will include an initial placement fee to match you with the right specialist for your family, plus an hourly rate for overnight care. We understand that quality overnight care is an investment, and we're working to make this essential service accessible to Tahoe families. We plan to offer two options to help with this: a gift registry option where friends and family can contribute toward your night care (perfect for baby showers!), and a sliding scale program for families who need assistance. We believe all new parents deserve support, regardless of financial circumstances.</p>
+                            </div>
+                        </div>
+
+                        <!-- FAQ Item 6 -->
+                        <div class="border border-gray-200 rounded-lg">
+                            <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq6')">
+                                <span class="text-lg font-medium text-navy-800">How can I be notified when you launch?</span>
+                                <svg id="faq6-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                </svg>
+                            </button>
+                            <div id="faq6" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                <p class="text-gray-600 leading-relaxed">Join our waitlist by visiting our <a href="/parents" class="text-amber-600 hover:text-amber-700 underline">Parents page</a> to be among the first to know when we launch. Early subscribers will receive priority booking and special introductory offers when our service becomes available. You can also sign up for updates via our newsletter popup.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-navy-900 text-white py-12 relative overflow-hidden">
+            <!-- Decorative floating elements - nighttime theme -->
+            <div class="absolute inset-0 pointer-events-none">
+                <!-- Stars -->
+                <div class="absolute top-8 left-16 text-navy-300 opacity-40 animate-ping" style="animation-delay: 0.5s;">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                <div class="absolute top-16 right-20 text-navy-200 opacity-30 animate-ping" style="animation-delay: 1s;">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-8 left-1/4 text-navy-400 opacity-35 animate-pulse" style="animation-delay: 2s;">
+                    <svg class="w-2 h-2" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                
+                <!-- Floating geometric shapes -->
+                <div class="absolute top-12 right-8 w-2 h-2 bg-navy-300 rounded-full opacity-25" style="animation: bounce 4s infinite; animation-delay: 0.5s;"></div>
+                <div class="absolute bottom-16 right-12 w-8 h-8 bg-navy-200 rounded-full opacity-15" style="animation: pulse 5s infinite; animation-delay: 1.5s;"></div>
+                <div class="absolute top-20 left-1/3 w-1 h-1 bg-navy-400 rounded-full opacity-40 animate-ping" style="animation-delay: 3s;"></div>
+                <div class="absolute bottom-12 left-8 w-3 h-3 bg-navy-200 rounded-full opacity-30" style="animation: pulse 3.5s infinite; animation-delay: 1s;"></div>
+                
+                <!-- Moon shapes -->
+                <div class="absolute top-6 left-1/4 opacity-20" style="animation: pulse 6s infinite; animation-delay: 1.2s;">
+                    <svg class="w-6 h-6 text-navy-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-6 right-1/4 opacity-15" style="animation: bounce 7s infinite; animation-delay: 2.8s;">
+                    <svg class="w-8 h-8 text-navy-200" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="max-w-4xl mx-auto px-6 relative z-10">
+                <!-- Email Signup -->
+                <div class="text-center mb-8">
+                    <h3 class="text-xl font-light text-white mb-4">Stay up to date</h3>
+                    <p class="text-navy-300 text-sm mb-6">We promise not to spam you (we're too tired for that).</p>
+                    
+                    <form action="/api/newsletter" method="POST" class="max-w-lg mx-auto">
+                        <!-- Honeypot field (hidden) -->
+                        <input type="text" name="company" style="display: none;" tabindex="-1" autocomplete="off">
+                        
+                        <div class="flex flex-col sm:flex-row gap-3">
+                            <input 
+                                type="email" 
+                                name="email"
+                                placeholder="Your email" 
+                                class="flex-1 px-4 py-3 rounded-lg border border-navy-700 bg-navy-800 text-white placeholder-navy-400 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                required
+                            >
+                            <button 
+                                type="submit" 
+                                class="bg-amber-500 text-navy-900 px-8 py-3 rounded-lg font-medium hover:bg-amber-400 transition-colors whitespace-nowrap sm:min-w-[120px]"
+                            >
+                                Sign up
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="flex flex-wrap justify-center gap-8 mb-8">
+                    <a href="mailto:info@valeriostudio.com" class="text-navy-300 hover:text-white transition-colors">Contact</a>
+                    <a href="/privacy" class="text-navy-300 hover:text-white transition-colors">Privacy</a>
+                    <a href="/terms" class="text-navy-300 hover:text-white transition-colors">Terms</a>
+                </div>
+                
+                <div class="text-center text-navy-300 text-sm">
+                    <p class="mb-4">Coming soon to North Lake Tahoe & Truckee</p>
+                    <p>&copy; 2025 Tahoe Night Nurse. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Newsletter Popup -->
+    <div id="newsletter-popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-3xl shadow-2xl max-w-lg mx-4 relative overflow-hidden">
+            <!-- Close button -->
+            <button onclick="closeNewsletter()" class="absolute top-4 right-4 p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full z-10 transition-colors">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+            
+            <!-- Content -->
+            <div class="p-12 text-center">
+                <h2 class="text-3xl font-light text-gray-900 mb-8 leading-tight">
+                    Join our mission to support well rested Tahoe families
+                </h2>
+                
+                <!-- Email signup form -->
+                <form action="/api/newsletter" method="POST" class="flex flex-col sm:flex-row gap-4 mb-6">
+                    <!-- Honeypot field (hidden) -->
+                    <input type="text" name="company" style="display: none;" tabindex="-1" autocomplete="off">
+                    
+                    <input 
+                        type="email" 
+                        name="email"
+                        placeholder="Email" 
+                        class="flex-1 px-6 py-4 rounded-full border border-gray-200 focus:outline-none focus:ring-2 focus:ring-amber-500 text-lg"
+                        required
+                    >
+                    <button 
+                        type="submit" 
+                        class="bg-amber-500 text-navy-900 px-8 py-4 rounded-full font-medium text-lg hover:bg-amber-400 transition-colors min-w-[120px]"
+                    >
+                        Submit
+                    </button>
+                </form>
+                
+                <p class="text-sm text-gray-600 leading-relaxed">
+                    We promise not to spam you (we're too tired for that). Just occasional updates about our local night nurse service.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Show newsletter popup after 10 seconds
+        setTimeout(function() {
+            if (!localStorage.getItem('newsletter-dismissed')) {
+                document.getElementById('newsletter-popup').classList.remove('hidden');
+            }
+        }, 10000);
+        
+        function closeNewsletter() {
+            document.getElementById('newsletter-popup').classList.add('hidden');
+            localStorage.setItem('newsletter-dismissed', 'true');
+        }
+        
+        // Close popup when clicking outside
+        document.getElementById('newsletter-popup').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeNewsletter();
+            }
+        });
+    </script>
+
+    <script>
+        // FAQ Toggle functionality using event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find all FAQ buttons and add click handlers
+            for (let i = 1; i <= 6; i++) {
+                const button = document.querySelector(`button[onclick="toggleFAQ('faq${i}')"]`);
+                if (button) {
+                    button.removeAttribute('onclick'); // Remove inline handler
+                    button.addEventListener('click', function() {
+                        toggleFAQ(`faq${i}`);
+                    });
+                }
+            }
+            
+            function toggleFAQ(faqId) {
+                const content = document.getElementById(faqId);
+                const icon = document.getElementById(faqId + '-icon');
+                const button = icon ? icon.closest('button') : null;
+                const container = button ? button.closest('.border') : null;
+                
+                if (content && icon) {
+                    const currentDisplay = window.getComputedStyle(content).display;
+                    
+                    if (currentDisplay === 'none') {
+                        content.style.display = 'block';
+                        icon.style.transform = 'rotate(180deg)';
+                        // Update styling for expanded state
+                        if (button) {
+                            button.classList.remove('rounded-lg');
+                            button.classList.add('rounded-t-lg');
+                            // Remove focus ring from button when expanded
+                            button.classList.remove('focus:ring-2', 'focus:ring-amber-500');
+                        }
+                        if (container) {
+                            container.classList.add('ring-2', 'ring-amber-500');
+                        }
+                    } else {
+                        content.style.display = 'none';
+                        icon.style.transform = 'rotate(0deg)';
+                        // Update styling for collapsed state
+                        if (button) {
+                            button.classList.remove('rounded-t-lg');
+                            button.classList.add('rounded-lg');
+                            // Restore focus ring to button when collapsed
+                            button.classList.add('focus:ring-2', 'focus:ring-amber-500');
+                        }
+                        if (container) {
+                            container.classList.remove('ring-2', 'ring-amber-500');
+                        }
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+</html>

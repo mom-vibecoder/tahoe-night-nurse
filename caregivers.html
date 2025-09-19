@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Caregivers | Tahoe Night Nurse</title>
+    <meta name="description" content="Apply to be considered for future overnight newborn care opportunities in the Tahoe area.">
+    
+    <!-- Google Fonts - Lato -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'sans': ['Lato', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            300: '#cbd5e1',
+                            400: '#94a3b8',
+                            500: '#64748b',
+                            600: '#475569',
+                            700: '#334155',
+                            800: '#1e293b',
+                            900: '#0f172a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Analytics -->
+    <script defer data-domain="tahoenightnurse.com" src="https://plausible.io/js/script.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Lato', system-ui, sans-serif;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            text-rendering: optimizeLegibility;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-900">
+    <div class="min-h-screen flex flex-col bg-navy-900">
+        <!-- Header -->
+        <header class="bg-navy-800 border-b border-navy-700">
+            <div class="max-w-4xl mx-auto px-6 py-4">
+                <a href="/" class="text-white hover:text-amber-300 font-semibold text-lg transition-colors">
+                    ← Tahoe Night Nurse
+                </a>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="flex-1 py-12 relative overflow-hidden">
+            <!-- Decorative floating elements - nighttime theme -->
+            <div class="absolute inset-0 pointer-events-none">
+                <!-- Stars -->
+                <div class="absolute top-20 left-16 text-navy-300 opacity-60 animate-ping" style="animation-delay: 0.5s;">
+                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                <div class="absolute top-32 right-16 text-navy-200 opacity-40 animate-ping" style="animation-delay: 1s;">
+                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-24 left-20 text-navy-400 opacity-50 animate-pulse" style="animation-delay: 2s;">
+                    <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2l2.4 7.2h7.6l-6 4.8 2.4 7.2-6-4.8-6 4.8 2.4-7.2-6-4.8h7.6z"/>
+                    </svg>
+                </div>
+                
+                <!-- Floating geometric shapes - dramatically varied sizes -->
+                <div class="absolute top-16 right-8 w-2 h-2 bg-navy-300 rounded-full opacity-30" style="animation: bounce 3s infinite; animation-delay: 0.5s;"></div>
+                <div class="absolute bottom-32 right-12 w-12 h-12 bg-navy-200 rounded-full opacity-15" style="animation: pulse 4s infinite; animation-delay: 1.5s;"></div>
+                <div class="absolute top-40 left-1/4 w-1 h-1 bg-navy-400 rounded-full opacity-50 animate-ping" style="animation-delay: 3s;"></div>
+                <div class="absolute top-60 right-1/3 w-8 h-8 bg-navy-300 rounded-full opacity-25" style="animation: pulse 5s infinite; animation-delay: 4s;"></div>
+                <div class="absolute bottom-40 left-16 w-16 h-16 bg-navy-400 rounded-full opacity-10" style="animation: bounce 6s infinite; animation-delay: 2.5s;"></div>
+                <div class="absolute top-72 left-8 w-3 h-3 bg-navy-200 rounded-full opacity-40" style="animation: pulse 3.5s infinite; animation-delay: 1s;"></div>
+                
+                <!-- Moon/crescent shapes -->
+                <div class="absolute top-24 left-1/3 opacity-25" style="animation: pulse 4s infinite; animation-delay: 1.2s;">
+                    <svg class="w-5 h-5 text-navy-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                    </svg>
+                </div>
+                <div class="absolute bottom-20 right-8 opacity-30" style="animation: bounce 5s infinite; animation-delay: 2.8s;">
+                    <svg class="w-14 h-14 text-navy-200" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                    </svg>
+                </div>
+                <div class="absolute top-36 right-20 opacity-15" style="animation: pulse 6s infinite; animation-delay: 3.5s;">
+                    <svg class="w-20 h-20 text-navy-400" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2C8.13 2 5 5.13 5 9s3.13 7 7 7c1.93 0 3.68-.79 4.95-2.05C15.68 15.21 14.93 16 14 16c-2.21 0-4-1.79-4-4s1.79-4 4-4c.93 0 1.68.79 2.95 1.05C15.68 4.79 13.93 2 12 2z"/>
+                    </svg>
+                </div>
+                
+                <!-- Abstract curved lines -->
+                <div class="absolute bottom-16 right-1/4 opacity-15 animate-pulse" style="animation-delay: 4.2s;">
+                    <svg class="w-20 h-10 text-navy-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 12c0-1.657 4.03-3 9-3s9 1.343 9 3-4.03 3-9 3-9-1.343-9-3z"/>
+                    </svg>
+                </div>
+                <div class="absolute top-28 left-8 opacity-25 animate-bounce" style="animation-delay: 1.8s;">
+                    <svg class="w-12 h-6 text-navy-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M20 12c0 4.4-3.6 8-8 8s-8-3.6-8-8"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="max-w-3xl mx-auto px-6 relative z-10">
+                <div class="text-center mb-12">
+                    <!-- Icon -->
+                    <div class="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-500 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg">
+                        <svg class="w-8 h-8 text-navy-900" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                        </svg>
+                    </div>
+                    
+                    <h1 class="text-3xl md:text-4xl font-light mb-8 text-white">Join Our Night Care Team</h1>
+                    
+                    <div class="space-y-6">
+                        <p class="text-xl text-amber-200 font-medium mb-6">
+                            Interested in becoming a night specialist?
+                        </p>
+                        
+                        <div class="bg-amber-50 rounded-lg p-6 border-l-4 border-amber-400 text-left">
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-gray-700">
+                                        <strong class="text-navy-800">Currently prioritizing:</strong> Certified caregivers
+                                    </p>
+                                </div>
+                                <div>
+                                    <p class="text-gray-700">
+                                        <strong class="text-navy-800">Also welcome:</strong> Experienced parents with older children, retired nurses, doulas, or anyone with hands-on newborn care experience
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="flex flex-col sm:flex-row items-center justify-center sm:space-x-8 space-y-3 sm:space-y-0 text-sm text-gray-300 pt-4">
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-amber-400 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Training opportunities available
+                            </div>
+                            <div class="flex items-center">
+                                <svg class="w-4 h-4 text-amber-400 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                                Background checks required
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form -->
+                <div class="bg-white rounded-2xl shadow-xl border border-gray-100 p-8 md:p-10">
+                        <form action="/api/caregivers" method="POST" class="space-y-8">
+                    <!-- Honeypot field (hidden) -->
+                    <input type="text" name="company" style="display: none;" tabindex="-1" autocomplete="off">
+                    
+                    <!-- Name & Contact Info -->
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="full_name" class="block text-sm font-medium text-gray-700 mb-2">
+                                Full name *
+                            </label>
+                            <input 
+                                type="text" 
+                                id="full_name" 
+                                name="full_name" 
+                                required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                placeholder="Your full name"
+                            >
+                        </div>
+
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
+                                Email address *
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                required 
+                                class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                                placeholder="your@email.com"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Phone -->
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-2">
+                            Phone number *
+                        </label>
+                        <input 
+                            type="tel" 
+                            id="phone" 
+                            name="phone" 
+                            required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                            placeholder="(555) 123-4567"
+                        >
+                    </div>
+
+                    <!-- Certifications -->
+                    <div class="bg-amber-50 rounded-xl p-6 border border-amber-100">
+                        <label class="block text-sm font-medium text-navy-800 mb-4 flex items-center">
+                            <svg class="w-5 h-5 text-amber-600 mr-2" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                            </svg>
+                            Certifications & Experience
+                        </label>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="cert_infant_cpr" 
+                                    name="certs" 
+                                    value="Infant CPR"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="cert_infant_cpr" class="ml-3 text-sm text-gray-700">Infant CPR</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="cert_ncs" 
+                                    name="certs" 
+                                    value="NCS"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="cert_ncs" class="ml-3 text-sm text-gray-700">Newborn Care Specialist (NCS)</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="cert_doula" 
+                                    name="certs" 
+                                    value="Doula"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="cert_doula" class="ml-3 text-sm text-gray-700">Doula</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="cert_rn" 
+                                    name="certs" 
+                                    value="RN"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="cert_rn" class="ml-3 text-sm text-gray-700">Registered Nurse (RN)</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="cert_none_training" 
+                                    name="certs" 
+                                    value="No certifications - interested in training program"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="cert_none_training" class="ml-3 text-sm text-gray-700">No current certifications, but interested in training program</label>
+                            </div>
+                            <div class="space-y-2">
+                                <div class="flex items-center">
+                                    <input 
+                                        type="checkbox" 
+                                        id="cert_other" 
+                                        name="certs" 
+                                        value="Other"
+                                        class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                        onchange="toggleOtherCertText(this)"
+                                    >
+                                    <label for="cert_other" class="ml-3 text-sm text-gray-700">Other</label>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="cert_other_text" 
+                                    name="cert_other_text" 
+                                    placeholder="Please specify..."
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent text-sm ml-7 hidden"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Years of Experience -->
+                    <div>
+                        <label for="years_experience" class="block text-sm font-medium text-gray-700 mb-2">
+                            Years of newborn experience
+                        </label>
+                        <input 
+                            type="number" 
+                            id="years_experience" 
+                            name="years_experience" 
+                            min="0" 
+                            max="50"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                            placeholder="e.g., 5"
+                        >
+                    </div>
+
+                    <!-- Availability -->
+                    <div>
+                        <label for="availability" class="block text-sm font-medium text-gray-700 mb-2">
+                            General availability preference *
+                        </label>
+                        <select 
+                            id="availability" 
+                            name="availability" 
+                            required 
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                        >
+                            <option value="">Select general preference</option>
+                            <option value="Primarily weeknights">Primarily weeknights</option>
+                            <option value="Primarily weekends">Primarily weekends</option>
+                            <option value="Open to both weeknights and weekends">Open to both weeknights and weekends</option>
+                            <option value="Very flexible - open to discuss">Very flexible - open to discuss</option>
+                        </select>
+                    </div>
+
+                    <!-- Notes -->
+                    <div>
+                        <label for="notes" class="block text-sm font-medium text-gray-700 mb-2">
+                            Notes
+                        </label>
+                        <textarea 
+                            id="notes" 
+                            name="notes" 
+                            rows="3" 
+                            maxlength="280"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                            placeholder="Tell us about your experience or any questions (280 characters max)"
+                        ></textarea>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <span id="notes-count">0</span>/280 characters
+                        </div>
+                    </div>
+
+                    <!-- Consent Checkboxes -->
+                    <div class="space-y-4">
+                        <div class="flex items-start">
+                            <input 
+                                type="checkbox" 
+                                id="verification_consent" 
+                                name="verification_consent" 
+                                required 
+                                class="mt-1 h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                            >
+                            <label for="verification_consent" class="ml-3 text-sm text-gray-700">
+                                I understand background checks and verification may be required before introductions. *
+                            </label>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-8 text-center">
+                        <button 
+                            type="submit" 
+                            class="w-full bg-amber-500 text-navy-900 font-semibold py-4 px-8 rounded-xl hover:bg-amber-400 transition-all duration-200 focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 min-h-[56px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 flex items-center justify-center group"
+                        >
+                            <svg class="w-5 h-5 mr-2 group-hover:scale-110 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Express Interest
+                        </button>
+                        <p class="text-sm text-gray-500 mt-3">We'll be in touch within a few days ✨</p>
+                    </div>
+                        </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="bg-navy-900 text-white py-8">
+            <div class="max-w-4xl mx-auto px-6 text-center">
+                <div class="flex flex-wrap justify-center gap-8 mb-6">
+                    <a href="mailto:info@valeriostudio.com" class="text-navy-300 hover:text-white transition-colors">Contact</a>
+                    <a href="/privacy" class="text-navy-300 hover:text-white transition-colors">Privacy</a>
+                    <a href="/terms" class="text-navy-300 hover:text-white transition-colors">Terms</a>
+                </div>
+                
+                <div class="text-navy-300 text-sm">
+                    <p>&copy; 2025 Tahoe Night Nurse. All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Character counter for notes field
+        const notesTextarea = document.getElementById('notes');
+        const notesCount = document.getElementById('notes-count');
+        
+        notesTextarea.addEventListener('input', function() {
+            const currentLength = this.value.length;
+            notesCount.textContent = currentLength;
+            
+            if (currentLength > 280) {
+                notesCount.style.color = '#ef4444';
+            } else {
+                notesCount.style.color = '#6b7280';
+            }
+        });
+
+        // Toggle other certification text input
+        function toggleOtherCertText(checkbox) {
+            const textInput = document.getElementById('cert_other_text');
+            if (checkbox.checked) {
+                textInput.classList.remove('hidden');
+                textInput.focus();
+            } else {
+                textInput.classList.add('hidden');
+                textInput.value = '';
+            }
+        }
+    </script>
+</body>
+</html>

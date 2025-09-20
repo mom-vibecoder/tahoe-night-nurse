@@ -1,0 +1,45 @@
+name: Deploy to Hetzner
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Deploy to server
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          cd /path/to/your/app
+          git pull origin main
+          npm install --production
+          
+          # Set environment variables if they don't exist
+          if [ ! -f .env ]; then
+            echo "Creating .env file..."
+            cat > .env << EOF
+          PORT=3000
+          NODE_ENV=production
+          DATABASE_PATH=./data/tahoe-night-nurse.db
+          BASIC_AUTH_USER=admin
+          BASIC_AUTH_PASS=changeme123
+          MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }}
+          MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }}
+          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
+          FROM_EMAIL=${{ secrets.FROM_EMAIL }}
+          DOMAIN=https://tahoenightnurse.com
+          EOF
+          fi
+          
+          # Restart the application
+          pm2 restart tahoe-night-nurse || pm2 start server/index.js --name tahoe-night-nurse
+          pm2 save

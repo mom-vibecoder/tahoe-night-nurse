@@ -1,39 +1,52 @@
 const express = require('express');
 const path = require('path');
 const rateLimit = require('express-rate-limit');
-const { addParent, addCaregiver, addNewsletter, getAllParents, getAllCaregivers, getAllNewsletter } = require('./db');
-const { sendParentNotification, sendCaregiverNotification } = require('./mailer');
+const basicAuth = require('basic-auth');
+const createCsvWriter = require('csv-writer').createObjectCsvWriter;
+const fs = require('fs');
+const os = require('os');
+
+const database = require('./db');
+const emailService = require('./email');
+const {
+  parentLeadValidation,
+  caregiverApplicationValidation,
+  handleValidationErrors,
+  normalizePhone
+} = require('./validators');
 
 const router = express.Router();
 
 // Rate limiting for form submissions
 const formLimiter = rateLimit({
-    windowMs: 1 * 60 * 1000, // 1 minute
-    max: 10, // limit each IP to 10 requests per windowMs
-    message: { error: 'Too many submissions. Please try again shortly.' },
-    standardHeaders: true,
-    legacyHeaders: false,
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 10, // limit each IP to 10 requests per windowMs
+  message: { error: 'Too many submissions. Please try again shortly.' },
+  standardHeaders: true,
+  legacyHeaders: false,
+});
+
+// Strict rate limiting for form submissions
+const strictLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minute
+  max: 5, // 5 attempts per minute
+  message: { error: 'Too many submission attempts. Please try again later.' },
+  skipSuccessfulRequests: true
 });
 
 // Basic auth middleware for admin routes
-function basicAuth(req, res, next) {
-    const auth = req.headers.authorization;
-    
-    if (!auth || !auth.startsWith('Basic ')) {
-        res.set('WWW-Authenticate', 'Basic realm="Admin"');
-        return res.status(401).send('Authentication required');
-    }
-    
-    const credentials = Buffer.from(auth.split(' ')[1], 'base64').toString().split(':');
-    const username = credentials[0];
-    const password = credentials[1];
-    
-    if (username === process.env.BASIC_AUTH_USER && password === process.env.BASIC_AUTH_PASS) {
-        next();
-    } else {
-        res.set('WWW-Authenticate', 'Basic realm="Admin"');
-        res.status(401).send('Invalid credentials');
-    }
+function authenticate(req, res, next) {
+  const credentials = basicAuth(req);
+  
+  if (!credentials ||
+      credentials.name !== process.env.BASIC_AUTH_USER ||
+      credentials.pass !== process.env.BASIC_AUTH_PASS) {
+    res.setHeader('WWW-Authenticate', 'Basic realm="Admin Area"');
+    res.status(401).send('Access denied');
+    return;
+  }
+  
+  next();
 }
 
 // Serve static files
@@ -41,9 +54,9 @@ router.use(express.static(path.join(__dirname, '..', 'public')));
 
 // Helper function to serve HTML files
 function serveHTML(filename) {
-    return (req, res) => {
-        res.sendFile(path.join(__dirname, '..', 'views', filename));
-    };
+  return (req, res) => {
+    res.sendFile(path.join(__dirname, '..', 'views', filename));
+  };
 }
 
 // Page routes
@@ -52,171 +65,331 @@ router.get('/parents', serveHTML('parents.html'));
 router.get('/caregivers', serveHTML('caregivers.html'));
 router.get('/thank-you', serveHTML('thank-you.html'));
 
-// Validation helpers
-function validateParentForm(data) {
-    const errors = [];
-    
-    if (!data.full_name || data.full_name.trim().length === 0) {
-        errors.push('Full name is required');
-    }
-    
-    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-        errors.push('Valid email is required');
-    }
-    
-    if (!data.start_timeframe) {
-        errors.push('Start timeframe is required');
-    }
-    
-    // Honeypot check
-    if (data.company && data.company.length > 0) {
-        errors.push('Bot detected');
-    }
-    
-    return errors;
-}
-
-function validateCaregiverForm(data) {
-    const errors = [];
-    
-    if (!data.full_name || data.full_name.trim().length === 0) {
-        errors.push('Full name is required');
-    }
-    
-    if (!data.email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
-        errors.push('Valid email is required');
-    }
-    
-    if (!data.phone || data.phone.trim().length === 0) {
-        errors.push('Phone number is required');
-    }
-    
-    if (!data.availability) {
-        errors.push('Availability is required');
-    }
-    
-    // Honeypot check
-    if (data.company && data.company.length > 0) {
-        errors.push('Bot detected');
-    }
-    
-    return errors;
-}
-
-// API routes
-router.post('/api/parents', formLimiter, (req, res) => {
+// API Routes with new validation and architecture
+router.post('/api/parents',
+  formLimiter,
+  strictLimiter,
+  parentLeadValidation,
+  handleValidationErrors,
+  async (req, res) => {
     try {
-        const errors = validateParentForm(req.body);
-        
-        if (errors.length > 0) {
-            return res.status(400).json({ error: errors[0] });
-        }
-        
-        const result = addParent(req.body);
-        
-        // Send email notification
-        sendParentNotification(req.body);
-        
-        res.redirect('/thank-you');
-    } catch (error) {
-        console.error('Error adding parent:', error);
-        res.status(500).json({ error: 'We couldn\'t submit right now. Please try again shortly.' });
-    }
-});
+      const data = {
+        ...req.body,
+        phone: normalizePhone(req.body.phone),
+        user_agent: req.get('user-agent'),
+        ip_addr: req.ip || req.connection.remoteAddress
+      };
 
-router.post('/api/caregivers', formLimiter, (req, res) => {
-    try {
-        const errors = validateCaregiverForm(req.body);
+      // Remove honeypot field
+      delete data._hp;
+
+      const result = database.insertParentLead(data);
+
+      // Send email notifications
+      try {
+        await emailService.sendAdminNotification('parent', { ...data, is_duplicate: result.isDuplicate });
         
-        if (errors.length > 0) {
-            return res.status(400).json({ error: errors[0] });
+        if (process.env.NODE_ENV === 'production' && data.email) {
+          await emailService.sendUserConfirmation('parent', data);
         }
-        
-        const result = addCaregiver(req.body);
-        
-        // Send email notification
-        sendCaregiverNotification(req.body);
-        
-        res.redirect('/thank-you');
+      } catch (emailError) {
+        console.error('Email send error:', emailError);
+      }
+
+      res.status(201).json({
+        ok: true,
+        id: result.id,
+        message: result.isDuplicate 
+          ? 'Thanks! We have your information and will be in touch soon.'
+          : 'Thank you! You\'re on our priority list.'
+      });
     } catch (error) {
-        console.error('Error adding caregiver:', error);
-        res.status(500).json({ error: 'We couldn\'t submit right now. Please try again shortly.' });
+      console.error('Parent lead submission error:', error);
+      res.status(500).json({
+        ok: false,
+        message: 'Sorry, something went wrong. Please try again or email us directly.'
+      });
     }
-});
+  }
+);
+
+router.post('/api/caregivers',
+  formLimiter,
+  strictLimiter,
+  caregiverApplicationValidation,
+  handleValidationErrors,
+  async (req, res) => {
+    try {
+      const data = {
+        ...req.body,
+        phone: normalizePhone(req.body.phone),
+        user_agent: req.get('user-agent'),
+        ip_addr: req.ip || req.connection.remoteAddress
+      };
+
+      // Remove honeypot field
+      delete data._hp;
+
+      const result = database.insertCaregiverApplication(data);
+
+      // Send email notifications
+      try {
+        await emailService.sendAdminNotification('caregiver', { ...data, is_duplicate: result.isDuplicate });
+        
+        if (process.env.NODE_ENV === 'production' && data.email) {
+          await emailService.sendUserConfirmation('caregiver', data);
+        }
+      } catch (emailError) {
+        console.error('Email send error:', emailError);
+      }
+
+      res.status(201).json({
+        ok: true,
+        id: result.id,
+        message: result.isDuplicate
+          ? 'Thanks! We have your application and will be in touch soon.'
+          : 'Thank you for applying! We\'ll be in touch soon.'
+      });
+    } catch (error) {
+      console.error('Caregiver application submission error:', error);
+      res.status(500).json({
+        ok: false,
+        message: 'Sorry, something went wrong. Please try again or email us directly.'
+      });
+    }
+  }
+);
 
 router.post('/api/newsletter', formLimiter, (req, res) => {
-    try {
-        const { email, company } = req.body;
-        
-        // Honeypot check
-        if (company && company.length > 0) {
-            return res.status(400).json({ error: 'Bot detected' });
-        }
-        
-        // Validate email
-        if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            return res.status(400).json({ error: 'Valid email is required' });
-        }
-        
-        const result = addNewsletter(email);
-        
-        res.redirect('/thank-you');
-    } catch (error) {
-        console.error('Error adding newsletter signup:', error);
-        if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
-            res.redirect('/thank-you'); // Already subscribed, redirect anyway
-        } else {
-            res.status(500).json({ error: 'We couldn\'t submit right now. Please try again shortly.' });
-        }
+  try {
+    const { email, company } = req.body;
+    
+    // Honeypot check
+    if (company && company.length > 0) {
+      return res.status(400).json({ error: 'Bot detected' });
     }
+    
+    // Validate email
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      return res.status(400).json({ error: 'Valid email is required' });
+    }
+    
+    const result = database.addNewsletter(email);
+    
+    res.redirect('/thank-you');
+  } catch (error) {
+    console.error('Error adding newsletter signup:', error);
+    if (error.code === 'SQLITE_CONSTRAINT_UNIQUE') {
+      res.redirect('/thank-you'); // Already subscribed, redirect anyway
+    } else {
+      res.status(500).json({ error: 'We couldn\'t submit right now. Please try again shortly.' });
+    }
+  }
+});
+
+// API Stats endpoint
+router.get('/api/stats', (req, res) => {
+  try {
+    const stats = database.getStats();
+    res.json(stats);
+  } catch (error) {
+    console.error('Stats error:', error);
+    res.status(500).json({ error: 'Failed to retrieve stats' });
+  }
+});
+
+// Admin routes
+router.use('/admin', authenticate);
+
+router.get('/admin', (req, res) => {
+  const stats = database.getStats();
+  const parents = database.getParentLeads({ limit: 10 });
+  const caregivers = database.getCaregiverApplications({ limit: 10 });
+
+  res.render('admin/dashboard', {
+    title: 'Admin Dashboard - Tahoe Night Nurse',
+    stats,
+    recentParents: parents,
+    recentCaregivers: caregivers
+  });
+});
+
+router.get('/admin/parents', (req, res) => {
+  const filters = {
+    startDate: req.query.start_date,
+    endDate: req.query.end_date,
+    location: req.query.location
+  };
+
+  const parents = database.getParentLeads(filters);
+
+  const parentsWithDuplicateFlag = parents.map(parent => {
+    const duplicates = parents.filter(p =>
+      p.email === parent.email && p.id !== parent.id
+    );
+    return {
+      ...parent,
+      hasDuplicates: duplicates.length > 0
+    };
+  });
+
+  res.render('admin/parents', {
+    title: 'Parent Leads - Admin - Tahoe Night Nurse',
+    parents: parentsWithDuplicateFlag,
+    filters,
+    locations: [
+      'South Lake Tahoe',
+      'North Lake Tahoe',
+      'Truckee',
+      'Visiting (not local)',
+      'Other (in region)'
+    ]
+  });
+});
+
+router.get('/admin/caregivers', (req, res) => {
+  const filters = {
+    startDate: req.query.start_date,
+    endDate: req.query.end_date,
+    experience_years: req.query.experience,
+    certification: req.query.certification
+  };
+
+  const caregivers = database.getCaregiverApplications(filters);
+
+  const caregiversWithDuplicateFlag = caregivers.map(caregiver => {
+    const duplicates = caregivers.filter(c =>
+      c.email === caregiver.email && c.id !== caregiver.id
+    );
+    return {
+      ...caregiver,
+      hasDuplicates: duplicates.length > 0
+    };
+  });
+
+  res.render('admin/caregivers', {
+    title: 'Caregiver Applications - Admin - Tahoe Night Nurse',
+    caregivers: caregiversWithDuplicateFlag,
+    filters,
+    experienceOptions: ['<1', '1-2', '2-5', '5+'],
+    certificationOptions: ['ncs', 'doula', 'rn_lpn', 'cpr', 'none']
+  });
 });
 
 // CSV export routes (admin only)
-router.get('/admin/export.csv', basicAuth, (req, res) => {
-    const type = req.query.type;
+router.get('/admin/export/parents', async (req, res) => {
+  try {
+    const filters = {
+      startDate: req.query.start_date,
+      endDate: req.query.end_date,
+      location: req.query.location
+    };
+
+    const parents = database.getParentLeads(filters);
+
+    const tempPath = path.join(os.tmpdir(), `parents_${Date.now()}.csv`);
+
+    const csvWriter = createCsvWriter({
+      path: tempPath,
+      header: [
+        { id: 'id', title: 'ID' },
+        { id: 'created_at', title: 'Date' },
+        { id: 'full_name', title: 'Name' },
+        { id: 'email', title: 'Email' },
+        { id: 'phone', title: 'Phone' },
+        { id: 'location', title: 'Location' },
+        { id: 'due_or_age', title: 'Due/Age' },
+        { id: 'start_timeframe', title: 'Start Timeframe' },
+        { id: 'notes', title: 'Notes' },
+        { id: 'is_duplicate', title: 'Duplicate' }
+      ]
+    });
+
+    await csvWriter.writeRecords(parents);
+
+    res.download(tempPath, `tahoe_night_nurse_parents_${new Date().toISOString().split('T')[0]}.csv`, (err) => {
+      if (err) {
+        console.error('Download error:', err);
+        res.status(500).send('Failed to download file');
+      }
+      fs.unlinkSync(tempPath);
+    });
+  } catch (error) {
+    console.error('Export error:', error);
+    res.status(500).send('Failed to export data');
+  }
+});
+
+router.get('/admin/export/caregivers', async (req, res) => {
+  try {
+    const filters = {
+      startDate: req.query.start_date,
+      endDate: req.query.end_date,
+      experience_years: req.query.experience,
+      certification: req.query.certification
+    };
+
+    const caregivers = database.getCaregiverApplications(filters);
+
+    const tempPath = path.join(os.tmpdir(), `caregivers_${Date.now()}.csv`);
+
+    const csvWriter = createCsvWriter({
+      path: tempPath,
+      header: [
+        { id: 'id', title: 'ID' },
+        { id: 'created_at', title: 'Date' },
+        { id: 'full_name', title: 'Name' },
+        { id: 'email', title: 'Email' },
+        { id: 'phone', title: 'Phone' },
+        { id: 'base_location', title: 'Base Location' },
+        { id: 'willing_regions', title: 'Willing Regions' },
+        { id: 'experience_years', title: 'Experience' },
+        { id: 'certifications', title: 'Certifications' },
+        { id: 'availability_notes', title: 'Availability' },
+        { id: 'experience_summary', title: 'Experience Summary' },
+        { id: 'is_duplicate', title: 'Duplicate' }
+      ]
+    });
+
+    await csvWriter.writeRecords(caregivers);
+
+    res.download(tempPath, `tahoe_night_nurse_caregivers_${new Date().toISOString().split('T')[0]}.csv`, (err) => {
+      if (err) {
+        console.error('Download error:', err);
+        res.status(500).send('Failed to download file');
+      }
+      fs.unlinkSync(tempPath);
+    });
+  } catch (error) {
+    console.error('Export error:', error);
+    res.status(500).send('Failed to export data');
+  }
+});
+
+// Legacy CSV export (backward compatibility)
+router.get('/admin/export.csv', authenticate, (req, res) => {
+  const type = req.query.type;
+  
+  if (type === 'parents') {
+    return res.redirect('/admin/export/parents');
+  } else if (type === 'caregivers') {
+    return res.redirect('/admin/export/caregivers');
+  } else if (type === 'newsletter') {
+    const subscribers = database.getAllNewsletter();
     
-    if (type === 'parents') {
-        const parents = getAllParents.all();
-        
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename="parents.csv"');
-        
-        let csv = 'ID,Full Name,Email,Phone,Baby Timing,Start Timeframe,Notes,Email Updates,Created At\n';
-        
-        parents.forEach(parent => {
-            csv += `${parent.id},"${parent.full_name}","${parent.email}","${parent.phone || ''}","${parent.baby_timing || ''}","${parent.start_timeframe}","${parent.notes || ''}","${parent.updates_opt_in ? 'Yes' : 'No'}","${parent.created_at}"\n`;
-        });
-        
-        res.send(csv);
-    } else if (type === 'caregivers') {
-        const caregivers = getAllCaregivers.all();
-        
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename="caregivers.csv"');
-        
-        let csv = 'ID,Full Name,Email,Phone,Certifications,Years Experience,Availability,Notes,Email Updates,Created At\n';
-        
-        caregivers.forEach(caregiver => {
-            csv += `${caregiver.id},"${caregiver.full_name}","${caregiver.email}","${caregiver.phone}","${caregiver.certs || ''}","${caregiver.years_experience || ''}","${caregiver.availability}","${caregiver.notes || ''}","${caregiver.updates_opt_in ? 'Yes' : 'No'}","${caregiver.created_at}"\n`;
-        });
-        
-        res.send(csv);
-    } else if (type === 'newsletter') {
-        const subscribers = getAllNewsletter.all();
-        
-        res.setHeader('Content-Type', 'text/csv');
-        res.setHeader('Content-Disposition', 'attachment; filename="newsletter.csv"');
-        
-        let csv = 'ID,Email,Created At\n';
-        
-        subscribers.forEach(subscriber => {
-            csv += `${subscriber.id},"${subscriber.email}","${subscriber.created_at}"\n`;
-        });
-        
-        res.send(csv);
-    } else {
-        res.status(400).send('Invalid export type. Use ?type=parents, ?type=caregivers, or ?type=newsletter');
-    }
+    res.setHeader('Content-Type', 'text/csv');
+    res.setHeader('Content-Disposition', 'attachment; filename="newsletter.csv"');
+    
+    let csv = 'ID,Email,Created At\n';
+    
+    subscribers.forEach(subscriber => {
+      csv += `${subscriber.id},"${subscriber.email}","${subscriber.created_at}"\n`;
+    });
+    
+    res.send(csv);
+  } else {
+    res.status(400).send('Invalid export type. Use ?type=parents, ?type=caregivers, or ?type=newsletter');
+  }
 });
 
 module.exports = router;

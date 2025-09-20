@@ -2,123 +2,272 @@ const Database = require('better-sqlite3');
 const path = require('path');
 const fs = require('fs');
 
-// Ensure data directory exists
-const dataDir = path.join(__dirname, '..', 'data');
-if (!fs.existsSync(dataDir)) {
-    fs.mkdirSync(dataDir, { recursive: true });
-}
+class DatabaseManager {
+  constructor() {
+    const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '..', 'data', 'tahoe-night-nurse.db');
+    const dbDir = path.dirname(dbPath);
 
-const dbPath = path.join(dataDir, 'db.sqlite');
-const db = new Database(dbPath);
+    if (!fs.existsSync(dbDir)) {
+      fs.mkdirSync(dbDir, { recursive: true });
+    }
 
-// Initialize database schema
-db.exec(`
-    CREATE TABLE IF NOT EXISTS parents (
+    this.db = new Database(dbPath, {
+      verbose: process.env.NODE_ENV === 'development' ? console.log : null
+    });
+
+    this.db.pragma('journal_mode = WAL');
+    this.db.pragma('foreign_keys = ON');
+
+    this.initializeTables();
+  }
+
+  initializeTables() {
+    const createParentsTable = `
+      CREATE TABLE IF NOT EXISTS parents_leads (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        full_name TEXT NOT NULL,
-        email TEXT NOT NULL,
+        full_name TEXT NOT NULL CHECK(length(full_name) >= 2 AND length(full_name) <= 100),
+        email TEXT NOT NULL CHECK(length(email) <= 254),
         phone TEXT,
-        baby_timing TEXT,
-        start_timeframe TEXT NOT NULL,
-        notes TEXT,
-        updates_opt_in INTEGER NOT NULL DEFAULT 0,
-        created_at TEXT NOT NULL
-    );
+        location TEXT NOT NULL CHECK(
+          location IN (
+            'South Lake Tahoe',
+            'North Lake Tahoe',
+            'Truckee',
+            'Visiting (not local)',
+            'Other (in region)'
+          )
+        ),
+        due_or_age TEXT NOT NULL CHECK(length(due_or_age) >= 1 AND length(due_or_age) <= 60),
+        start_timeframe TEXT NOT NULL CHECK(
+          start_timeframe IN (
+            'ASAP',
+            'Next 2-4 weeks',
+            '1-3 months',
+            '3+ months',
+            'Just researching'
+          )
+        ),
+        notes TEXT CHECK(length(notes) <= 1000),
+        user_agent TEXT,
+        ip_addr TEXT,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        is_duplicate BOOLEAN DEFAULT 0
+      )
+    `;
 
-    CREATE TABLE IF NOT EXISTS caregivers (
+    const createCaregiversTable = `
+      CREATE TABLE IF NOT EXISTS caregiver_applications (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        full_name TEXT NOT NULL,
-        email TEXT NOT NULL,
+        full_name TEXT NOT NULL CHECK(length(full_name) >= 2 AND length(full_name) <= 100),
+        email TEXT NOT NULL CHECK(length(email) <= 254),
         phone TEXT NOT NULL,
-        certs TEXT,
-        years_experience INTEGER,
-        availability TEXT NOT NULL,
-        notes TEXT,
-        updates_opt_in INTEGER NOT NULL DEFAULT 0,
-        created_at TEXT NOT NULL
-    );
+        base_location TEXT NOT NULL CHECK(length(base_location) >= 2 AND length(base_location) <= 120),
+        willing_regions TEXT NOT NULL,
+        experience_years TEXT NOT NULL CHECK(
+          experience_years IN ('<1', '1-2', '2-5', '5+')
+        ),
+        certifications TEXT NOT NULL,
+        availability_notes TEXT CHECK(length(availability_notes) <= 280),
+        experience_summary TEXT CHECK(length(experience_summary) <= 600),
+        user_agent TEXT,
+        ip_addr TEXT,
+        created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        is_duplicate BOOLEAN DEFAULT 0
+      )
+    `;
 
-    CREATE TABLE IF NOT EXISTS newsletter (
+    const createNewsletterTable = `
+      CREATE TABLE IF NOT EXISTS newsletter (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        email TEXT NOT NULL UNIQUE,
-        created_at TEXT NOT NULL
+        email TEXT UNIQUE NOT NULL,
+        created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `;
+
+    this.db.exec(createParentsTable);
+    this.db.exec(createCaregiversTable);
+    this.db.exec(createNewsletterTable);
+
+    this.db.exec(`
+      CREATE INDEX IF NOT EXISTS idx_parents_email ON parents_leads(email);
+      CREATE INDEX IF NOT EXISTS idx_parents_created ON parents_leads(created_at);
+      CREATE INDEX IF NOT EXISTS idx_caregivers_email ON caregiver_applications(email);
+      CREATE INDEX IF NOT EXISTS idx_caregivers_created ON caregiver_applications(created_at);
+    `);
+  }
+
+  insertParentLead(data) {
+    const stmt = this.db.prepare(`
+      INSERT INTO parents_leads (
+        full_name, email, phone, location, due_or_age,
+        start_timeframe, notes, user_agent, ip_addr, is_duplicate
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
+
+    const isDuplicate = this.checkDuplicate('parents_leads', data.email);
+
+    const result = stmt.run(
+      data.full_name,
+      data.email.toLowerCase(),
+      data.phone || null,
+      data.location,
+      data.due_or_age,
+      data.start_timeframe,
+      data.notes || null,
+      data.user_agent || null,
+      data.ip_addr || null,
+      isDuplicate ? 1 : 0
     );
 
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_parents_email 
-    ON parents(email);
+    return { id: result.lastInsertRowid, isDuplicate };
+  }
 
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_caregivers_email 
-    ON caregivers(email);
+  insertCaregiverApplication(data) {
+    const stmt = this.db.prepare(`
+      INSERT INTO caregiver_applications (
+        full_name, email, phone, base_location, willing_regions,
+        experience_years, certifications, availability_notes,
+        experience_summary, user_agent, ip_addr, is_duplicate
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+    `);
 
-    CREATE UNIQUE INDEX IF NOT EXISTS idx_newsletter_email 
-    ON newsletter(email);
-`);
+    const isDuplicate = this.checkDuplicate('caregiver_applications', data.email);
+    const willingRegions = Array.isArray(data.willing_regions)
+      ? data.willing_regions.join(',')
+      : data.willing_regions;
+    const certifications = Array.isArray(data.certifications)
+      ? data.certifications.join(',')
+      : data.certifications;
 
-// Prepared statements
-const insertParent = db.prepare(`
-    INSERT OR REPLACE INTO parents 
-    (full_name, email, phone, baby_timing, start_timeframe, notes, updates_opt_in, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-const insertCaregiver = db.prepare(`
-    INSERT OR REPLACE INTO caregivers 
-    (full_name, email, phone, certs, years_experience, availability, notes, updates_opt_in, created_at)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
-`);
-
-const insertNewsletter = db.prepare(`
-    INSERT OR REPLACE INTO newsletter 
-    (email, created_at)
-    VALUES (?, ?)
-`);
-
-const getAllParents = db.prepare('SELECT * FROM parents ORDER BY created_at DESC');
-const getAllCaregivers = db.prepare('SELECT * FROM caregivers ORDER BY created_at DESC');
-const getAllNewsletter = db.prepare('SELECT * FROM newsletter ORDER BY created_at DESC');
-
-function addParent(data) {
-    const created_at = new Date().toISOString();
-    return insertParent.run(
-        data.full_name,
-        data.email,
-        data.phone || null,
-        data.baby_timing || null,
-        data.start_timeframe,
-        data.notes || null,
-        data.updates_opt_in ? 1 : 0,
-        created_at
+    const result = stmt.run(
+      data.full_name,
+      data.email.toLowerCase(),
+      data.phone,
+      data.base_location,
+      willingRegions,
+      data.experience_years,
+      certifications,
+      data.availability_notes || null,
+      data.experience_summary || null,
+      data.user_agent || null,
+      data.ip_addr || null,
+      isDuplicate ? 1 : 0
     );
+
+    return { id: result.lastInsertRowid, isDuplicate };
+  }
+
+  checkDuplicate(table, email) {
+    const thirtyDaysAgo = new Date();
+    thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+    const stmt = this.db.prepare(`
+      SELECT COUNT(*) as count FROM ${table}
+      WHERE email = ? AND created_at > ?
+    `);
+
+    const result = stmt.get(email.toLowerCase(), thirtyDaysAgo.toISOString());
+    return result.count > 0;
+  }
+
+  getParentLeads(filters = {}) {
+    let query = 'SELECT * FROM parents_leads WHERE 1=1';
+    const params = [];
+
+    if (filters.startDate) {
+      query += ' AND created_at >= ?';
+      params.push(filters.startDate);
+    }
+
+    if (filters.endDate) {
+      query += ' AND created_at <= ?';
+      params.push(filters.endDate);
+    }
+
+    if (filters.location) {
+      query += ' AND location = ?';
+      params.push(filters.location);
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    if (filters.limit) {
+      query += ' LIMIT ?';
+      params.push(filters.limit);
+    }
+
+    const stmt = this.db.prepare(query);
+    return stmt.all(...params);
+  }
+
+  getCaregiverApplications(filters = {}) {
+    let query = 'SELECT * FROM caregiver_applications WHERE 1=1';
+    const params = [];
+
+    if (filters.startDate) {
+      query += ' AND created_at >= ?';
+      params.push(filters.startDate);
+    }
+
+    if (filters.endDate) {
+      query += ' AND created_at <= ?';
+      params.push(filters.endDate);
+    }
+
+    if (filters.experience_years) {
+      query += ' AND experience_years = ?';
+      params.push(filters.experience_years);
+    }
+
+    if (filters.certification) {
+      query += ' AND certifications LIKE ?';
+      params.push(`%${filters.certification}%`);
+    }
+
+    query += ' ORDER BY created_at DESC';
+
+    if (filters.limit) {
+      query += ' LIMIT ?';
+      params.push(filters.limit);
+    }
+
+    const stmt = this.db.prepare(query);
+    return stmt.all(...params);
+  }
+
+  addNewsletter(email) {
+    const stmt = this.db.prepare('INSERT INTO newsletter (email) VALUES (?)');
+    return stmt.run(email.toLowerCase());
+  }
+
+  getAllNewsletter() {
+    const stmt = this.db.prepare('SELECT * FROM newsletter ORDER BY created_at DESC');
+    return stmt.all();
+  }
+
+  getStats() {
+    const parentCount = this.db.prepare('SELECT COUNT(*) as count FROM parents_leads').get();
+    const caregiverCount = this.db.prepare('SELECT COUNT(*) as count FROM caregiver_applications').get();
+    const recentParents = this.db.prepare(`
+      SELECT COUNT(*) as count FROM parents_leads
+      WHERE created_at > datetime('now', '-7 days')
+    `).get();
+    const recentCaregivers = this.db.prepare(`
+      SELECT COUNT(*) as count FROM caregiver_applications
+      WHERE created_at > datetime('now', '-7 days')
+    `).get();
+
+    return {
+      totalParents: parentCount.count,
+      totalCaregivers: caregiverCount.count,
+      recentParents: recentParents.count,
+      recentCaregivers: recentCaregivers.count
+    };
+  }
+
+  close() {
+    this.db.close();
+  }
 }
 
-function addCaregiver(data) {
-    const created_at = new Date().toISOString();
-    const certs = Array.isArray(data.certs) ? data.certs.join(', ') : data.certs;
-    
-    return insertCaregiver.run(
-        data.full_name,
-        data.email,
-        data.phone,
-        certs || null,
-        data.years_experience || null,
-        data.availability,
-        data.notes || null,
-        data.updates_opt_in ? 1 : 0,
-        created_at
-    );
-}
-
-function addNewsletter(email) {
-    const created_at = new Date().toISOString();
-    return insertNewsletter.run(email, created_at);
-}
-
-module.exports = {
-    db,
-    addParent,
-    addCaregiver,
-    addNewsletter,
-    getAllParents,
-    getAllCaregivers,
-    getAllNewsletter
-};
+module.exports = new DatabaseManager();

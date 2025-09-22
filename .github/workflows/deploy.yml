@@ -19,7 +19,7 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo "🎯 TESTING REBUILT SERVER"
+          echo "🎯 TESTING NEW SERVER (5.161.93.142)"
           echo "User: $(whoami)"
           echo "Home: $HOME"
           echo "PWD: $(pwd)"

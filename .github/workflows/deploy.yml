@@ -19,7 +19,26 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          cd /root/tahoe-night-nurse
+          echo "🔍 Finding project directory..."
+          
+          # Check common locations for the project
+          if [ -d "/root/tahoe-night-nurse" ]; then
+            PROJECT_DIR="/root/tahoe-night-nurse"
+          elif [ -d "/home/$USER/tahoe-night-nurse" ]; then
+            PROJECT_DIR="/home/$USER/tahoe-night-nurse"
+          elif [ -d "/var/www/tahoe-night-nurse" ]; then
+            PROJECT_DIR="/var/www/tahoe-night-nurse"
+          elif [ -d "~/tahoe-night-nurse" ]; then
+            PROJECT_DIR="~/tahoe-night-nurse"
+          else
+            echo "❌ Project directory not found. Creating new one..."
+            PROJECT_DIR="/root/tahoe-night-nurse"
+            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git $PROJECT_DIR
+          fi
+          
+          echo "📁 Using project directory: $PROJECT_DIR"
+          cd $PROJECT_DIR
+          
           echo "📦 Pulling latest changes..."
           git pull origin main
           
@@ -49,13 +68,22 @@ jobs:
           mkdir -p data
           
           echo "🔄 Restarting application..."
+          # Show current directory and files
+          echo "📁 Current directory: $(pwd)"
+          echo "📂 Directory contents:"
+          ls -la
+          
           # Stop existing process
           pm2 stop tahoe-night-nurse 2>/dev/null || true
           pm2 delete tahoe-night-nurse 2>/dev/null || true
           
           # Start fresh
+          echo "🚀 Starting PM2 process from: $(pwd)/server/index.js"
           pm2 start server/index.js --name tahoe-night-nurse
           pm2 save
           
           echo "✅ Deployment complete!"
+          echo "📊 PM2 Status:"
           pm2 status
+          echo "📝 Recent logs:"
+          pm2 logs tahoe-night-nurse --lines 10 --nostream

@@ -12,20 +12,9 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enhanced security middleware (temporarily relaxed for debugging)
+// Minimal security middleware for debugging
 app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "'unsafe-inline'", "https://cdn.tailwindcss.com", "https://plausible.io"],
-      styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com", "https://cdn.tailwindcss.com"],
-      fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", "https://plausible.io"],
-      frameAncestors: ["'none'"],
-      baseUri: ["'self'"]
-    }
-  },
+  contentSecurityPolicy: false,  // Disable CSP completely for debugging
   hsts: false  // Disable HSTS to allow HTTP access via IP
 }));
 

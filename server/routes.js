@@ -222,6 +222,7 @@ router.get('/admin/parents', (req, res) => {
   };
 
   const parents = database.getParentLeads(filters);
+  const stats = database.getStats();
 
   const parentsWithDuplicateFlag = parents.map(parent => {
     const duplicates = parents.filter(p =>
@@ -236,6 +237,9 @@ router.get('/admin/parents', (req, res) => {
   res.render('admin/parents', {
     title: 'Parent Leads - Admin - Tahoe Night Nurse',
     parents: parentsWithDuplicateFlag,
+    totalParents: stats.totalParents || 0,
+    parentsThisWeek: stats.parentsThisWeek || 0,
+    parentsThisMonth: stats.parentsThisMonth || 0,
     filters,
     locations: [
       'South Lake Tahoe',
@@ -256,6 +260,7 @@ router.get('/admin/caregivers', (req, res) => {
   };
 
   const caregivers = database.getCaregiverApplications(filters);
+  const stats = database.getStats();
 
   const caregiversWithDuplicateFlag = caregivers.map(caregiver => {
     const duplicates = caregivers.filter(c =>
@@ -270,6 +275,9 @@ router.get('/admin/caregivers', (req, res) => {
   res.render('admin/caregivers', {
     title: 'Caregiver Applications - Admin - Tahoe Night Nurse',
     caregivers: caregiversWithDuplicateFlag,
+    totalCaregivers: stats.totalCaregivers || 0,
+    caregiversThisWeek: stats.caregiversThisWeek || 0,
+    caregiversThisMonth: stats.caregiversThisMonth || 0,
     filters,
     experienceOptions: ['<1', '1-2', '2-5', '5+'],
     certificationOptions: ['ncs', 'doula', 'rn_lpn', 'cpr', 'none']

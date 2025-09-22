@@ -36,8 +36,10 @@ jobs:
             cd /root/tahoe-night-nurse
           }
           
-          # Update project
-          git pull origin main || git reset --hard origin/main
+          # Force update project (ignore any local changes)
+          git fetch origin
+          git reset --hard origin/main
+          git clean -fd
           
           # Install dependencies
           npm install --production

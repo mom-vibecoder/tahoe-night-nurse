@@ -53,13 +53,27 @@
     </style>
 </head>
 <body class="bg-white text-gray-900">
+    <!-- Top Banner -->
+    <div class="bg-amber-50 border-b border-amber-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-center items-center py-2 text-sm">
+                <span class="text-navy-700 font-medium">
+                    Are you a Night Nanny? 
+                    <a href="/caregivers" class="text-amber-600 hover:text-amber-500 underline font-semibold ml-1">
+                        Join our network →
+                    </a>
+                </span>
+            </div>
+        </div>
+    </div>
+
     <!-- Navigation Bar -->
-    <nav class="bg-white shadow-sm border-b border-gray-100 sticky top-0 z-50">
+    <nav class="bg-navy-50 shadow-sm border-b border-navy-100 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo/Brand -->
                 <div class="flex-shrink-0">
-                    <a href="/" class="text-xl font-semibold text-navy-800 hover:text-navy-600 transition-colors">
+                    <a href="/" class="text-2xl font-bold text-navy-800 hover:text-navy-700 transition-colors">
                         Tahoe Night Nurse
                     </a>
                 </div>
@@ -67,24 +81,24 @@
                 <!-- Desktop Navigation -->
                 <div class="hidden md:block">
                     <div class="ml-10 flex items-baseline space-x-8">
-                        <a href="/" class="text-navy-700 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
-                            Home
+                        <a href="/#how-it-works" class="text-navy-600 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
+                            How It Works
                         </a>
-                        <a href="/parents" class="text-navy-700 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
-                            For Parents
+                        <a href="/#about" class="text-navy-600 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
+                            About
                         </a>
-                        <a href="/caregivers" class="text-navy-700 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
-                            For Caregivers
-                        </a>
-                        <a href="/#faq" class="text-navy-700 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
+                        <a href="/#faq" class="text-navy-600 hover:text-amber-600 px-3 py-2 text-sm font-medium transition-colors">
                             FAQ
+                        </a>
+                        <a href="/parents" class="bg-amber-500 text-navy-900 hover:bg-amber-400 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
+                            Get Started
                         </a>
                     </div>
                 </div>
                 
                 <!-- Mobile menu button -->
                 <div class="md:hidden">
-                    <button type="button" class="text-navy-700 hover:text-amber-600 focus:outline-none focus:text-amber-600 transition-colors" id="mobile-menu-button">
+                    <button type="button" class="text-navy-600 hover:text-amber-600 focus:outline-none focus:text-amber-600 transition-colors" id="mobile-menu-button">
                         <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
                         </svg>
@@ -95,18 +109,18 @@
         
         <!-- Mobile Navigation -->
         <div class="md:hidden hidden" id="mobile-menu">
-            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-white border-t border-gray-100">
-                <a href="/" class="text-navy-700 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
-                    Home
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3 bg-navy-50 border-t border-navy-100">
+                <a href="/#how-it-works" class="text-navy-600 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
+                    How It Works
                 </a>
-                <a href="/parents" class="text-navy-700 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
-                    For Parents
+                <a href="/#about" class="text-navy-600 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
+                    About
                 </a>
-                <a href="/caregivers" class="text-navy-700 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
-                    For Caregivers
-                </a>
-                <a href="/#faq" class="text-navy-700 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
+                <a href="/#faq" class="text-navy-600 hover:text-amber-600 block px-3 py-2 text-base font-medium transition-colors">
                     FAQ
+                </a>
+                <a href="/parents" class="bg-amber-500 text-navy-900 hover:bg-amber-400 block px-3 py-2 rounded-lg text-base font-medium transition-colors">
+                    Get Started
                 </a>
             </div>
         </div>
@@ -202,7 +216,7 @@
             </section>
 
             <!-- Value Props -->
-            <section class="py-16 md:py-20 bg-gray-50">
+            <section id="how-it-works" class="py-16 md:py-20 bg-gray-50">
                 <div class="max-w-6xl mx-auto px-6">
                     <div class="text-center mb-12">
                         <h2 class="text-3xl md:text-4xl font-light mb-4 text-navy-800">Professional care you can trust</h2>
@@ -255,7 +269,7 @@
             </section>
 
             <!-- Trust Building Section -->
-            <section class="py-16 md:py-20 bg-navy-900">
+            <section id="about" class="py-16 md:py-20 bg-navy-900">
                 <div class="max-w-6xl mx-auto px-6">
                     <!-- Image -->
                     <div class="mb-12">

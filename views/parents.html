@@ -301,6 +301,96 @@
                     </div>
                     </form>
                 </div>
+
+                <!-- FAQ Section -->
+                <section class="py-16 md:py-20 bg-white">
+                    <div class="max-w-4xl mx-auto px-6">
+                        <div class="text-center mb-12">
+                            <h2 class="text-3xl font-light mb-4 text-navy-800">Frequently Asked Questions</h2>
+                            <p class="text-lg text-gray-600">Everything you need to know about our upcoming night nurse service</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <!-- FAQ Item 1 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none rounded-lg faq-button" onclick="toggleFAQ('faq1')">
+                                    <span class="text-lg font-medium text-navy-800">What exactly is a night nurse service?</span>
+                                    <svg id="faq1-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq1" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">A night nurse service provides specialized overnight care for your newborn or infant while you get much-needed sleep. Our CPR-certified specialists handle nighttime feedings, diaper changes, soothing, and basic newborn care during the overnight hours. They keep track of feedings and changes so you're not left guessing what happened overnight. This service is designed to help new parents recover physically and emotionally during the demanding early months, following your parenting preferences and baby's natural rhythms.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 2 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq2')">
+                                    <span class="text-lg font-medium text-navy-800">When will your service be available in North Lake Tahoe & Truckee?</span>
+                                    <svg id="faq2-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq2" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">Our service will be available starting Fall 2025. We're currently building our team of certified specialists to ensure we can provide the highest quality care when we launch.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 3 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq3')">
+                                    <span class="text-lg font-medium text-navy-800">What qualifications will your night nurses have?</span>
+                                    <svg id="faq3-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq3" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">All of our night specialists will be CPR-certified, extensively background-checked, and experienced in newborn care. We require professional childcare experience, specialized training in newborn care, and excellent references. Our rigorous vetting process ensures only the most qualified, trustworthy professionals join our team.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 4 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq4')">
+                                    <span class="text-lg font-medium text-navy-800">What ages will you provide care for?</span>
+                                    <svg id="faq4-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq4" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">We specialize in caring for babies from newborn to 6 months. Our focus is on the critical early months when nighttime support makes the biggest difference for new parents.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 5 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq5')">
+                                    <span class="text-lg font-medium text-navy-800">What will your general rates be?</span>
+                                    <svg id="faq5-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq5" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">Our service will include an initial placement fee to match you with the right specialist for your family, plus an hourly rate for overnight care. We understand that quality overnight care is an investment, and we're working to make this essential service accessible to Tahoe families. We plan to offer two options to help with this: a gift registry option where friends and family can contribute toward your night care (perfect for baby showers!), and a sliding scale program for families who need assistance. We believe all new parents deserve support, regardless of financial circumstances.</p>
+                                </div>
+                            </div>
+
+                            <!-- FAQ Item 6 -->
+                            <div class="border border-gray-200 rounded-lg">
+                                <button class="w-full px-6 py-4 text-left flex justify-between items-center hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-amber-500 rounded-lg" onclick="toggleFAQ('faq6')">
+                                    <span class="text-lg font-medium text-navy-800">How can I be notified when you launch?</span>
+                                    <svg id="faq6-icon" class="w-5 h-5 text-amber-600 transform transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>
+                                <div id="faq6" class="px-6 py-4 border-t border-gray-100 bg-gray-50 rounded-b-lg" style="display: none;">
+                                    <p class="text-gray-600 leading-relaxed">Join our priority list by filling out the form above to be among the first to know when we launch. Early subscribers will receive priority booking and special introductory offers when our service becomes available. You can also sign up for updates via our newsletter below.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
             </div>
         </main>
 
@@ -361,6 +451,59 @@
                 notesCount.style.color = '#ef4444';
             } else {
                 notesCount.style.color = '#6b7280';
+            }
+        });
+
+        // FAQ Toggle functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Find all FAQ buttons and add click handlers
+            for (let i = 1; i <= 6; i++) {
+                const button = document.querySelector(`button[onclick="toggleFAQ('faq${i}')"]`);
+                if (button) {
+                    button.removeAttribute('onclick'); // Remove inline handler
+                    button.addEventListener('click', function() {
+                        toggleFAQ(`faq${i}`);
+                    });
+                }
+            }
+            
+            function toggleFAQ(faqId) {
+                const content = document.getElementById(faqId);
+                const icon = document.getElementById(faqId + '-icon');
+                const button = icon ? icon.closest('button') : null;
+                const container = button ? button.closest('.border') : null;
+                
+                if (content && icon) {
+                    const currentDisplay = window.getComputedStyle(content).display;
+                    
+                    if (currentDisplay === 'none') {
+                        content.style.display = 'block';
+                        icon.style.transform = 'rotate(180deg)';
+                        // Update styling for expanded state
+                        if (button) {
+                            button.classList.remove('rounded-lg');
+                            button.classList.add('rounded-t-lg');
+                            // Remove focus ring from button when expanded
+                            button.classList.remove('focus:ring-2', 'focus:ring-amber-500');
+                        }
+                        if (container) {
+                            container.classList.add('ring-2', 'ring-amber-500');
+                        }
+                    } else {
+                        content.style.display = 'none';
+                        icon.style.transform = 'rotate(0deg)';
+                        // Update styling for collapsed state
+                        if (button) {
+                            button.classList.remove('rounded-t-lg');
+                            button.classList.add('rounded-lg');
+                            // Restore focus ring to button when collapsed
+                            button.classList.add('focus:ring-2', 'focus:ring-amber-500');
+                        }
+                        if (container) {
+                            container.classList.remove('ring-2', 'ring-amber-500');
+                        }
+                    }
+                }
             }
         });
     </script>

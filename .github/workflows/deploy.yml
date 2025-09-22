@@ -65,18 +65,12 @@ jobs:
           # Set environment variables if they don't exist
           if [ ! -f .env ]; then
             echo "🔧 Creating .env file..."
-            cat > .env << EOF
-          PORT=3000
-          NODE_ENV=production
-          DATABASE_PATH=./data/tahoe-night-nurse.db
-          BASIC_AUTH_USER=admin
-          BASIC_AUTH_PASS=changeme123
-          MAILGUN_API_KEY=${{ secrets.MAILGUN_API_KEY }}
-          MAILGUN_DOMAIN=${{ secrets.MAILGUN_DOMAIN }}
-          ADMIN_EMAIL=${{ secrets.ADMIN_EMAIL }}
-          FROM_EMAIL=${{ secrets.FROM_EMAIL }}
-          DOMAIN=https://tahoenightnurse.com
-          EOF
+            echo "PORT=3000" > .env
+            echo "NODE_ENV=production" >> .env
+            echo "DATABASE_PATH=./data/tahoe-night-nurse.db" >> .env
+            echo "BASIC_AUTH_USER=admin" >> .env
+            echo "BASIC_AUTH_PASS=changeme123" >> .env
+            echo "DOMAIN=https://tahoenightnurse.com" >> .env
           else
             echo "✅ .env file already exists"
           fi
@@ -99,16 +93,16 @@ jobs:
           pm2 start server/index.js --name tahoe-night-nurse
           pm2 save
           
-          # Check if SSL is set up, if not, set it up
+          # Check if SSL is set up (but don't auto-setup to avoid permission issues)
           echo "🔒 Checking SSL setup..."
           if [ ! -f /etc/letsencrypt/live/tahoenightnurse.com/fullchain.pem ]; then
-            echo "🔧 SSL not found, setting up SSL and nginx..."
-            chmod +x setup-ssl.sh
-            ./setup-ssl.sh
+            echo "⚠️ SSL not found. Run setup-ssl.sh manually on server to enable HTTPS"
           else
             echo "✅ SSL certificate exists"
-            # Reload nginx to pick up any config changes
-            sudo nginx -t && sudo systemctl reload nginx || echo "⚠️ Nginx reload failed"
+            # Reload nginx to pick up any config changes (if nginx is running)
+            if command -v nginx >/dev/null 2>&1; then
+              sudo nginx -t && sudo systemctl reload nginx 2>/dev/null || echo "⚠️ Nginx reload failed"
+            fi
           fi
           
           echo "✅ Deployment complete!"

@@ -26,10 +26,23 @@ jobs:
           echo "OS: $(uname -a)"
           
           echo "📦 Checking prerequisites..."
-          which node && node --version || echo "❌ Node.js not found"
-          which npm && npm --version || echo "❌ npm not found"
-          which git && git --version || echo "❌ git not found"
-          which pm2 && pm2 --version || echo "❌ pm2 not found"
+          
+          # Check if Node.js is installed
+          if ! command -v node >/dev/null 2>&1; then
+            echo "❌ Node.js not found. Installing dependencies..."
+            chmod +x server-setup.sh
+            ./server-setup.sh
+            # Source bashrc to pick up new installations
+            source ~/.bashrc || true
+          else
+            echo "✅ Node.js found: $(node --version)"
+          fi
+          
+          # Verify all tools are now available
+          which node && node --version || echo "❌ Node.js still not found after setup"
+          which npm && npm --version || echo "❌ npm still not found after setup"
+          which git && git --version || echo "❌ git still not found after setup"
+          which pm2 && pm2 --version || echo "❌ pm2 still not found after setup"
           
           echo "🔍 Finding project directory..."
           
@@ -60,7 +73,13 @@ jobs:
           git pull origin main || echo "⚠️ Git pull failed"
           
           echo "📦 Installing dependencies..."
-          npm install --production || echo "⚠️ npm install failed"
+          
+          # Try npm install, with fallback PATH
+          if ! npm install --production; then
+            echo "⚠️ npm install failed, trying with explicit PATH..."
+            export PATH="/usr/bin:/usr/local/bin:$PATH"
+            /usr/bin/npm install --production || echo "⚠️ npm install still failed"
+          fi
           
           # Set environment variables if they don't exist
           if [ ! -f .env ]; then
@@ -90,8 +109,15 @@ jobs:
           
           # Start fresh
           echo "🚀 Starting PM2 process from: $(pwd)/server/index.js"
-          pm2 start server/index.js --name tahoe-night-nurse
-          pm2 save
+          
+          # Try PM2 with fallback PATH
+          if ! pm2 start server/index.js --name tahoe-night-nurse; then
+            echo "⚠️ PM2 failed, trying with explicit PATH..."
+            export PATH="/usr/bin:/usr/local/bin:$PATH"
+            /usr/local/bin/pm2 start server/index.js --name tahoe-night-nurse || /usr/bin/pm2 start server/index.js --name tahoe-night-nurse
+          fi
+          
+          pm2 save || true
           
           # Check if SSL is set up (but don't auto-setup to avoid permission issues)
           echo "🔒 Checking SSL setup..."

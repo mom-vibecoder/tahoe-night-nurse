@@ -1,64 +1,40 @@
-name: Deploy to Hetzner
+name: Deploy
 
 on:
   push:
     branches: [ main ]
-  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
     steps:
-    - uses: actions/checkout@v4
-    
-    - name: Deploy to server
+    - name: Deploy
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo "🚀 SIMPLIFIED DEPLOYMENT"
+          # Kill existing
+          pkill -f "node server/index.js" || true
           
-          # Install Node.js if missing (simple approach)
-          if ! command -v node >/dev/null 2>&1; then
-            echo "Installing Node.js..."
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            sudo apt-get install -y nodejs
-            sudo npm install -g pm2
-          fi
+          # Remove old
+          rm -rf /root/app
           
-          # Go to project directory
-          cd /root/tahoe-night-nurse || {
-            echo "Cloning project..."
-            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/tahoe-night-nurse
-            cd /root/tahoe-night-nurse
-          }
+          # Get fresh code
+          git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/app
+          cd /root/app
           
-          # Force update project (ignore any local changes)
-          git fetch origin
-          git reset --hard origin/main
-          git clean -fd
+          # Simple setup
+          curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash - || true
+          apt-get install -y nodejs || true
+          npm install
           
-          # Install dependencies
-          npm install --production
-          
-          # Create basic .env if missing
-          if [ ! -f .env ]; then
-            echo "PORT=3000" > .env
-            echo "NODE_ENV=production" >> .env
-            echo "BASIC_AUTH_USER=admin" >> .env
-            echo "BASIC_AUTH_PASS=changeme123" >> .env
-          fi
-          
-          # Create data directory
+          # Basic env
+          echo "PORT=3000" > .env
           mkdir -p data
           
-          # Restart with PM2
-          pm2 delete tahoe-night-nurse 2>/dev/null || true
-          pm2 start server/index.js --name tahoe-night-nurse
-          pm2 save
+          # Start
+          nohup node server/index.js > /dev/null 2>&1 &
           
-          echo "✅ Deployment complete!"
-          pm2 status
+          echo "Done"

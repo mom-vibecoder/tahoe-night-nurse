@@ -12,7 +12,7 @@ const routes = require('./routes');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Enhanced security middleware
+// Enhanced security middleware (temporarily relaxed for debugging)
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -26,11 +26,7 @@ app.use(helmet({
       baseUri: ["'self'"]
     }
   },
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true
-  }
+  hsts: false  // Disable HSTS to allow HTTP access via IP
 }));
 
 // Compression middleware
@@ -65,11 +61,9 @@ app.use(express.static(path.join(__dirname, '..', 'public'), {
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, '..', 'views'));
 
-// CORS configuration
+// CORS configuration (temporarily allow all origins for debugging)
 app.use(cors({
-  origin: process.env.NODE_ENV === 'production'
-    ? process.env.DOMAIN
-    : true,
+  origin: true,  // Allow all origins for now
   credentials: true
 }));
 

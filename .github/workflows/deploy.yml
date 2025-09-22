@@ -19,12 +19,17 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo "🎯 TESTING WITH UPDATED HOST SECRET"
+          echo "🔍 System diagnostics..."
           echo "User: $(whoami)"
           echo "Home: $HOME"
           echo "PWD: $(pwd)"
-          echo "Date: $(date)"
-          echo "✅ SSH connection successful!"
+          echo "OS: $(uname -a)"
+          
+          echo "📦 Checking prerequisites..."
+          which node && node --version || echo "❌ Node.js not found"
+          which npm && npm --version || echo "❌ npm not found"
+          which git && git --version || echo "❌ git not found"
+          which pm2 && pm2 --version || echo "❌ pm2 not found"
           
           echo "🔍 Finding project directory..."
           

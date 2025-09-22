@@ -5,7 +5,12 @@
   "main": "server/index.js",
   "scripts": {
     "start": "node server/index.js",
-    "dev": "node server/index.js",
+    "dev": "nodemon server/index.js",
+    "pm2:start": "pm2 start server/index.js --name tahoe-night-nurse",
+    "pm2:stop": "pm2 stop tahoe-night-nurse",
+    "pm2:restart": "pm2 restart tahoe-night-nurse",
+    "pm2:status": "pm2 status",
+    "pm2:logs": "pm2 logs tahoe-night-nurse",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -26,5 +31,8 @@
     "helmet": "^8.1.0",
     "mailgun.js": "^12.0.3",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }

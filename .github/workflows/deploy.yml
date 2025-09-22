@@ -99,8 +99,21 @@ jobs:
           pm2 start server/index.js --name tahoe-night-nurse
           pm2 save
           
+          # Check if SSL is set up, if not, set it up
+          echo "🔒 Checking SSL setup..."
+          if [ ! -f /etc/letsencrypt/live/tahoenightnurse.com/fullchain.pem ]; then
+            echo "🔧 SSL not found, setting up SSL and nginx..."
+            chmod +x setup-ssl.sh
+            ./setup-ssl.sh
+          else
+            echo "✅ SSL certificate exists"
+            # Reload nginx to pick up any config changes
+            sudo nginx -t && sudo systemctl reload nginx || echo "⚠️ Nginx reload failed"
+          fi
+          
           echo "✅ Deployment complete!"
           echo "📊 PM2 Status:"
           pm2 status
           echo "📝 Recent logs:"
           pm2 logs tahoe-night-nurse --lines 10 --nostream
+          echo "🌐 Site should be available at: https://tahoenightnurse.com"

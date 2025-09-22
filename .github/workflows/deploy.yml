@@ -20,12 +20,15 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         script: |
           cd /root/tahoe-night-nurse
+          echo "📦 Pulling latest changes..."
           git pull origin main
+          
+          echo "📦 Installing dependencies..."
           npm install --production
           
           # Set environment variables if they don't exist
           if [ ! -f .env ]; then
-            echo "Creating .env file..."
+            echo "🔧 Creating .env file..."
             cat > .env << EOF
           PORT=3000
           NODE_ENV=production
@@ -38,8 +41,21 @@ jobs:
           FROM_EMAIL=${{ secrets.FROM_EMAIL }}
           DOMAIN=https://tahoenightnurse.com
           EOF
+          else
+            echo "✅ .env file already exists"
           fi
           
-          # Restart the application
-          pm2 restart tahoe-night-nurse || pm2 start server/index.js --name tahoe-night-nurse
+          # Ensure data directory exists
+          mkdir -p data
+          
+          echo "🔄 Restarting application..."
+          # Stop existing process
+          pm2 stop tahoe-night-nurse 2>/dev/null || true
+          pm2 delete tahoe-night-nurse 2>/dev/null || true
+          
+          # Start fresh
+          pm2 start server/index.js --name tahoe-night-nurse
           pm2 save
+          
+          echo "✅ Deployment complete!"
+          pm2 status

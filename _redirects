@@ -1,6 +1,0 @@
-# Cloudflare Pages redirects
-# API routes are handled by functions automatically
-# Static page routes for clean URLs
-/parents /parents/index.html 200
-/caregivers /caregivers/index.html 200
-/thank-you /thank-you/index.html 200

@@ -19,121 +19,44 @@ jobs:
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
         script: |
-          echo "🚀 DEPLOYING WITH NODE.JS INSTALLED"
-          echo "User: $(whoami)"
-          echo "Home: $HOME"
-          echo "PWD: $(pwd)"
-          echo "OS: $(uname -a)"
+          echo "🚀 SIMPLIFIED DEPLOYMENT"
           
-          echo "📦 Checking prerequisites..."
-          
-          # Check if Node.js is installed
+          # Install Node.js if missing (simple approach)
           if ! command -v node >/dev/null 2>&1; then
-            echo "❌ Node.js not found. Installing dependencies..."
-            chmod +x server-setup.sh
-            ./server-setup.sh
-            # Source bashrc to pick up new installations
-            source ~/.bashrc || true
-          else
-            echo "✅ Node.js found: $(node --version)"
+            echo "Installing Node.js..."
+            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+            sudo npm install -g pm2
           fi
           
-          # Verify all tools are now available
-          which node && node --version || echo "❌ Node.js still not found after setup"
-          which npm && npm --version || echo "❌ npm still not found after setup"
-          which git && git --version || echo "❌ git still not found after setup"
-          which pm2 && pm2 --version || echo "❌ pm2 still not found after setup"
+          # Go to project directory
+          cd /root/tahoe-night-nurse || {
+            echo "Cloning project..."
+            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/tahoe-night-nurse
+            cd /root/tahoe-night-nurse
+          }
           
-          echo "🔍 Finding project directory..."
+          # Update project
+          git pull origin main || git reset --hard origin/main
           
-          # Check common locations for the project
-          if [ -d "/root/tahoe-night-nurse" ]; then
-            PROJECT_DIR="/root/tahoe-night-nurse"
-            echo "✅ Found project at: $PROJECT_DIR"
-          elif [ -d "/home/$USER/tahoe-night-nurse" ]; then
-            PROJECT_DIR="/home/$USER/tahoe-night-nurse"
-            echo "✅ Found project at: $PROJECT_DIR"
-          elif [ -d "/var/www/tahoe-night-nurse" ]; then
-            PROJECT_DIR="/var/www/tahoe-night-nurse"
-            echo "✅ Found project at: $PROJECT_DIR"
-          elif [ -d "~/tahoe-night-nurse" ]; then
-            PROJECT_DIR="~/tahoe-night-nurse"
-            echo "✅ Found project at: $PROJECT_DIR"
-          else
-            echo "❌ Project directory not found. Creating new one..."
-            PROJECT_DIR="/root/tahoe-night-nurse"
-            echo "📥 Cloning repository to: $PROJECT_DIR"
-            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git $PROJECT_DIR
-          fi
+          # Install dependencies
+          npm install --production
           
-          echo "📁 Using project directory: $PROJECT_DIR"
-          cd $PROJECT_DIR || exit 1
-          
-          echo "📦 Pulling latest changes..."
-          git pull origin main || echo "⚠️ Git pull failed"
-          
-          echo "📦 Installing dependencies..."
-          
-          # Try npm install, with fallback PATH
-          if ! npm install --production; then
-            echo "⚠️ npm install failed, trying with explicit PATH..."
-            export PATH="/usr/bin:/usr/local/bin:$PATH"
-            /usr/bin/npm install --production || echo "⚠️ npm install still failed"
-          fi
-          
-          # Set environment variables if they don't exist
+          # Create basic .env if missing
           if [ ! -f .env ]; then
-            echo "🔧 Creating .env file..."
             echo "PORT=3000" > .env
             echo "NODE_ENV=production" >> .env
-            echo "DATABASE_PATH=./data/tahoe-night-nurse.db" >> .env
             echo "BASIC_AUTH_USER=admin" >> .env
             echo "BASIC_AUTH_PASS=changeme123" >> .env
-            echo "DOMAIN=https://tahoenightnurse.com" >> .env
-          else
-            echo "✅ .env file already exists"
           fi
           
-          # Ensure data directory exists
+          # Create data directory
           mkdir -p data
           
-          echo "🔄 Restarting application..."
-          # Show current directory and files
-          echo "📁 Current directory: $(pwd)"
-          echo "📂 Directory contents:"
-          ls -la
-          
-          # Stop existing process
-          pm2 stop tahoe-night-nurse 2>/dev/null || true
+          # Restart with PM2
           pm2 delete tahoe-night-nurse 2>/dev/null || true
-          
-          # Start fresh
-          echo "🚀 Starting PM2 process from: $(pwd)/server/index.js"
-          
-          # Try PM2 with fallback PATH
-          if ! pm2 start server/index.js --name tahoe-night-nurse; then
-            echo "⚠️ PM2 failed, trying with explicit PATH..."
-            export PATH="/usr/bin:/usr/local/bin:$PATH"
-            /usr/local/bin/pm2 start server/index.js --name tahoe-night-nurse || /usr/bin/pm2 start server/index.js --name tahoe-night-nurse
-          fi
-          
-          pm2 save || true
-          
-          # Check if SSL is set up (but don't auto-setup to avoid permission issues)
-          echo "🔒 Checking SSL setup..."
-          if [ ! -f /etc/letsencrypt/live/tahoenightnurse.com/fullchain.pem ]; then
-            echo "⚠️ SSL not found. Run setup-ssl.sh manually on server to enable HTTPS"
-          else
-            echo "✅ SSL certificate exists"
-            # Reload nginx to pick up any config changes (if nginx is running)
-            if command -v nginx >/dev/null 2>&1; then
-              sudo nginx -t && sudo systemctl reload nginx 2>/dev/null || echo "⚠️ Nginx reload failed"
-            fi
-          fi
+          pm2 start server/index.js --name tahoe-night-nurse
+          pm2 save
           
           echo "✅ Deployment complete!"
-          echo "📊 PM2 Status:"
           pm2 status
-          echo "📝 Recent logs:"
-          pm2 logs tahoe-night-nurse --lines 10 --nostream
-          echo "🌐 Site should be available at: https://tahoenightnurse.com"

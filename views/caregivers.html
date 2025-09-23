@@ -268,23 +268,68 @@
                         >
                     </div>
 
-                    <!-- Location -->
+                    <!-- Base Location -->
                     <div>
-                        <label for="location" class="block text-sm font-medium text-gray-700 mb-2">
-                            Location *
+                        <label for="base_location" class="block text-sm font-medium text-gray-700 mb-2">
+                            Base location *
                         </label>
-                        <select 
-                            id="location" 
-                            name="location" 
+                        <input 
+                            type="text" 
+                            id="base_location" 
+                            name="base_location" 
                             required 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
+                            placeholder="e.g., South Lake Tahoe, Truckee, etc."
                         >
-                            <option value="">Select your location</option>
-                            <option value="South Lake Tahoe">South Lake Tahoe</option>
-                            <option value="North Lake Tahoe">North Lake Tahoe</option>
-                            <option value="Truckee">Truckee</option>
-                            <option value="Other Tahoe Area">Other Tahoe Area</option>
-                        </select>
+                    </div>
+
+                    <!-- Willing to Serve Regions -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-3">
+                            Regions you're willing to serve * (select all that apply)
+                        </label>
+                        <div class="space-y-2">
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="region_south" 
+                                    name="willing_regions" 
+                                    value="South Lake Tahoe"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="region_south" class="ml-3 text-sm text-gray-700">South Lake Tahoe</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="region_north" 
+                                    name="willing_regions" 
+                                    value="North Lake Tahoe"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="region_north" class="ml-3 text-sm text-gray-700">North Lake Tahoe</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="region_truckee" 
+                                    name="willing_regions" 
+                                    value="Truckee"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="region_truckee" class="ml-3 text-sm text-gray-700">Truckee</label>
+                            </div>
+                            <div class="flex items-center">
+                                <input 
+                                    type="checkbox" 
+                                    id="region_other" 
+                                    name="willing_regions" 
+                                    value="Other Tahoe area"
+                                    class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
+                                >
+                                <label for="region_other" class="ml-3 text-sm text-gray-700">Other Tahoe area</label>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Certifications -->
@@ -303,7 +348,7 @@
                                 <input 
                                     type="checkbox" 
                                     id="cert_infant_cpr" 
-                                    name="certs" 
+                                    name="certifications" 
                                     value="Infant CPR"
                                     class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                 >
@@ -313,7 +358,7 @@
                                 <input 
                                     type="checkbox" 
                                     id="cert_ncs" 
-                                    name="certs" 
+                                    name="certifications" 
                                     value="NCS"
                                     class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                 >
@@ -323,7 +368,7 @@
                                 <input 
                                     type="checkbox" 
                                     id="cert_doula" 
-                                    name="certs" 
+                                    name="certifications" 
                                     value="Doula"
                                     class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                 >
@@ -333,7 +378,7 @@
                                 <input 
                                     type="checkbox" 
                                     id="cert_rn" 
-                                    name="certs" 
+                                    name="certifications" 
                                     value="RN"
                                     class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                 >
@@ -343,7 +388,7 @@
                                 <input 
                                     type="checkbox" 
                                     id="cert_none_training" 
-                                    name="certs" 
+                                    name="certifications" 
                                     value="No certifications - interested in training program"
                                     class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                 >
@@ -354,7 +399,7 @@
                                     <input 
                                         type="checkbox" 
                                         id="cert_other" 
-                                        name="certs" 
+                                        name="certifications" 
                                         value="Other"
                                         class="h-4 w-4 text-amber-600 focus:ring-amber-500 border-gray-300 rounded"
                                         onchange="toggleOtherCertText(this)"
@@ -374,37 +419,57 @@
 
                     <!-- Years of Experience -->
                     <div>
-                        <label for="years_experience" class="block text-sm font-medium text-gray-700 mb-2">
-                            Years of newborn experience
-                        </label>
-                        <input 
-                            type="number" 
-                            id="years_experience" 
-                            name="years_experience" 
-                            min="0" 
-                            max="50"
-                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
-                            placeholder="e.g., 5"
-                        >
-                    </div>
-
-                    <!-- Availability -->
-                    <div>
-                        <label for="availability" class="block text-sm font-medium text-gray-700 mb-2">
-                            General availability preference *
+                        <label for="experience_years" class="block text-sm font-medium text-gray-700 mb-2">
+                            Years of newborn experience *
                         </label>
                         <select 
-                            id="availability" 
-                            name="availability" 
+                            id="experience_years" 
+                            name="experience_years" 
                             required 
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent"
                         >
-                            <option value="">Select general preference</option>
-                            <option value="Primarily weeknights">Primarily weeknights</option>
-                            <option value="Primarily weekends">Primarily weekends</option>
-                            <option value="Open to both weeknights and weekends">Open to both weeknights and weekends</option>
-                            <option value="Very flexible - open to discuss">Very flexible - open to discuss</option>
+                            <option value="">Select years of experience</option>
+                            <option value="<1">Less than 1 year</option>
+                            <option value="1-2">1-2 years</option>
+                            <option value="2-5">2-5 years</option>
+                            <option value="5+">5+ years</option>
                         </select>
+                    </div>
+
+                    <!-- Availability Notes -->
+                    <div>
+                        <label for="availability_notes" class="block text-sm font-medium text-gray-700 mb-2">
+                            Availability notes
+                        </label>
+                        <textarea 
+                            id="availability_notes" 
+                            name="availability_notes" 
+                            rows="3" 
+                            maxlength="280"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                            placeholder="Tell us about your availability preferences (280 characters max)"
+                        ></textarea>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <span id="availability-count">0</span>/280 characters
+                        </div>
+                    </div>
+
+                    <!-- Experience Summary -->
+                    <div>
+                        <label for="experience_summary" class="block text-sm font-medium text-gray-700 mb-2">
+                            Experience summary
+                        </label>
+                        <textarea 
+                            id="experience_summary" 
+                            name="experience_summary" 
+                            rows="4" 
+                            maxlength="600"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-transparent resize-none"
+                            placeholder="Tell us about your experience with newborns and families (600 characters max)"
+                        ></textarea>
+                        <div class="text-sm text-gray-500 mt-1">
+                            <span id="experience-count">0</span>/600 characters
+                        </div>
                     </div>
 
                     <!-- Notes -->

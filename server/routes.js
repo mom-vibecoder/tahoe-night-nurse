@@ -105,13 +105,7 @@ router.post('/api/parents',
         console.error('Email send error:', emailError);
       }
 
-      res.status(201).json({
-        ok: true,
-        id: result.id,
-        message: result.isDuplicate 
-          ? 'Thanks! We have your information and will be in touch soon.'
-          : 'Thank you! You\'re on our priority list.'
-      });
+      res.redirect('/thank-you');
     } catch (error) {
       console.error('Parent lead submission error:', error);
       res.status(500).json({
@@ -153,13 +147,7 @@ router.post('/api/caregivers',
         console.error('Email send error:', emailError);
       }
 
-      res.status(201).json({
-        ok: true,
-        id: result.id,
-        message: result.isDuplicate
-          ? 'Thanks! We have your application and will be in touch soon.'
-          : 'Thank you for applying! We\'ll be in touch soon.'
-      });
+      res.redirect('/thank-you');
     } catch (error) {
       console.error('Caregiver application submission error:', error);
       res.status(500).json({

@@ -123,8 +123,8 @@
                                     <% if (parents && parents.length > 0) { %>
                                         <% parents.forEach(parent => { %>
                                         <tr class="border-t border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 text-gray-600"><%= parent.created_at_formatted %></td>
-                                            <td class="py-4 font-medium text-gray-900"><%= parent.first_name %> <%= parent.last_name %></td>
+                                            <td class="py-4 text-gray-600"><%= new Date(parent.created_at).toLocaleDateString() %></td>
+                                            <td class="py-4 font-medium text-gray-900"><%= parent.full_name %></td>
                                             <td class="py-4 text-gray-600">
                                                 <a href="mailto:<%= parent.email %>" class="text-blue-600 hover:text-blue-700"><%= parent.email %></a>
                                             </td>
@@ -132,8 +132,8 @@
                                                 <a href="tel:<%= parent.phone %>" class="text-blue-600 hover:text-blue-700"><%= parent.phone %></a>
                                             </td>
                                             <td class="py-4 text-gray-600"><%= parent.location %></td>
-                                            <td class="py-4 text-gray-600"><%= parent.timeframe %></td>
-                                            <td class="py-4 text-gray-600"><%= parent.num_children %> child<%= parent.num_children > 1 ? 'ren' : '' %></td>
+                                            <td class="py-4 text-gray-600"><%= parent.start_timeframe %></td>
+                                            <td class="py-4 text-gray-600"><%= parent.due_or_age %></td>
                                             <td class="py-4">
                                                 <% if (parent.is_duplicate) { %>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

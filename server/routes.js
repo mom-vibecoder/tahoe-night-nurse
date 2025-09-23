@@ -65,10 +65,19 @@ router.get('/parents', serveHTML('parents.html'));
 router.get('/caregivers', serveHTML('caregivers.html'));
 router.get('/thank-you', serveHTML('thank-you.html'));
 
+// Middleware to combine first_name and last_name into full_name
+const combineNames = (req, res, next) => {
+  if (req.body.first_name && req.body.last_name) {
+    req.body.full_name = `${req.body.first_name.trim()} ${req.body.last_name.trim()}`;
+  }
+  next();
+};
+
 // API Routes with new validation and architecture
 router.post('/api/parents',
   formLimiter,
   strictLimiter,
+  combineNames,
   parentLeadValidation,
   handleValidationErrors,
   async (req, res) => {
@@ -116,6 +125,7 @@ router.post('/api/parents',
 router.post('/api/caregivers',
   formLimiter,
   strictLimiter,
+  combineNames,
   caregiverApplicationValidation,
   handleValidationErrors,
   async (req, res) => {

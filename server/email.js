@@ -47,11 +47,11 @@ class EmailService {
     let subject, text, html;
 
     if (type === 'parent') {
-      subject = 'Thanks — You\'re on the Tahoe Night Nurse Priority List';
+      subject = 'Thanks — You\'re on the Tahoe Night Nanny Priority List';
       text = this.formatParentConfirmationText(data);
       html = this.formatParentConfirmationHtml(data);
     } else {
-      subject = 'Thanks for Your Caregiver Application — Tahoe Night Nurse';
+      subject = 'Thanks for Your Caregiver Application — Tahoe Night Nanny';
       text = this.formatCaregiverConfirmationText(data);
       html = this.formatCaregiverConfirmationHtml(data);
     }
@@ -171,7 +171,7 @@ IP Address: ${data.ip_addr || 'Unknown'}
     return `
 Hi ${data.full_name.split(' ')[0]},
 
-Thanks for joining the Tahoe Night Nurse priority list! 
+Thanks for joining the Tahoe Night Nanny priority list! 
 
 We're building a trusted network of certified night nurses right here in the Lake Tahoe region, and you're among the first to know when we launch.
 
@@ -183,7 +183,7 @@ What happens next?
 Have questions? Just reply to this email.
 
 Best,
-The Tahoe Night Nurse Team
+The Tahoe Night Nanny Team
 
 P.S. Feel free to forward this to other parents who might be interested!
     `.trim();
@@ -193,7 +193,7 @@ P.S. Feel free to forward this to other parents who might be interested!
     return `
       <p>Hi ${data.full_name.split(' ')[0]},</p>
       
-      <p>Thanks for joining the Tahoe Night Nurse priority list!</p>
+      <p>Thanks for joining the Tahoe Night Nanny priority list!</p>
       
       <p>We're building a trusted network of certified night nurses right here in the Lake Tahoe region, and you're among the first to know when we launch.</p>
       
@@ -206,7 +206,7 @@ P.S. Feel free to forward this to other parents who might be interested!
       
       <p>Have questions? Just reply to this email.</p>
       
-      <p>Best,<br>The Tahoe Night Nurse Team</p>
+      <p>Best,<br>The Tahoe Night Nanny Team</p>
       
       <p><small>P.S. Feel free to forward this to other parents who might be interested!</small></p>
     `;
@@ -216,14 +216,14 @@ P.S. Feel free to forward this to other parents who might be interested!
     return `
 Hi ${data.full_name.split(' ')[0]},
 
-Thank you for your interest in joining the Tahoe Night Nurse team!
+Thank you for your interest in joining the Tahoe Night Nanny team!
 
 We received your application and we're excited to learn more about your background in newborn care. Our team will review your application and reach out within the next few days.
 
 In the meantime, feel free to reach out if you have any questions about the role or our service.
 
 Best regards,
-The Tahoe Night Nurse Team
+The Tahoe Night Nanny Team
     `.trim();
   }
 
@@ -231,13 +231,13 @@ The Tahoe Night Nurse Team
     return `
       <p>Hi ${data.full_name.split(' ')[0]},</p>
       
-      <p>Thank you for your interest in joining the Tahoe Night Nurse team!</p>
+      <p>Thank you for your interest in joining the Tahoe Night Nanny team!</p>
       
       <p>We received your application and we're excited to learn more about your background in newborn care. Our team will review your application and reach out within the next few days.</p>
       
       <p>In the meantime, feel free to reach out if you have any questions about the role or our service.</p>
       
-      <p>Best regards,<br>The Tahoe Night Nurse Team</p>
+      <p>Best regards,<br>The Tahoe Night Nanny Team</p>
     `;
   }
 }

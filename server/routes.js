@@ -207,7 +207,7 @@ router.get('/admin', (req, res) => {
   const caregivers = database.getCaregiverApplications({ limit: 10 });
 
   res.render('admin/dashboard', {
-    title: 'Admin Dashboard - Tahoe Night Nurse',
+    title: 'Admin Dashboard - Tahoe Night Nanny',
     stats,
     recentParents: parents,
     recentCaregivers: caregivers
@@ -235,7 +235,7 @@ router.get('/admin/parents', (req, res) => {
   });
 
   res.render('admin/parents', {
-    title: 'Parent Leads - Admin - Tahoe Night Nurse',
+    title: 'Parent Leads - Admin - Tahoe Night Nanny',
     parents: parentsWithDuplicateFlag,
     totalParents: stats.totalParents || 0,
     parentsThisWeek: stats.parentsThisWeek || 0,
@@ -273,7 +273,7 @@ router.get('/admin/caregivers', (req, res) => {
   });
 
   res.render('admin/caregivers', {
-    title: 'Caregiver Applications - Admin - Tahoe Night Nurse',
+    title: 'Caregiver Applications - Admin - Tahoe Night Nanny',
     caregivers: caregiversWithDuplicateFlag,
     totalCaregivers: stats.totalCaregivers || 0,
     caregiversThisWeek: stats.caregiversThisWeek || 0,

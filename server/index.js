@@ -75,7 +75,7 @@ app.get('/healthz', (req, res) => {
 // 404 handler
 app.use((req, res) => {
   res.status(404).render('404', {
-    title: 'Page Not Found - Tahoe Night Nurse'
+    title: 'Page Not Found - Tahoe Night Nanny'
   });
 });
 
@@ -97,7 +97,7 @@ app.use((err, req, res, next) => {
 
 const server = app.listen(PORT, () => {
   console.log(`
-🚀 Tahoe Night Nurse Server
+🚀 Tahoe Night Nanny Server
 📍 Running on: http://localhost:${PORT}
 🌍 Environment: ${process.env.NODE_ENV || 'development'}
 📊 Admin Panel: http://localhost:${PORT}/admin

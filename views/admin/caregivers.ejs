@@ -123,17 +123,17 @@
                                     <% if (caregivers && caregivers.length > 0) { %>
                                         <% caregivers.forEach(caregiver => { %>
                                         <tr class="border-t border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 text-gray-600"><%= caregiver.created_at_formatted %></td>
-                                            <td class="py-4 font-medium text-gray-900"><%= caregiver.first_name %> <%= caregiver.last_name %></td>
+                                            <td class="py-4 text-gray-600"><%= new Date(caregiver.created_at).toLocaleDateString() %></td>
+                                            <td class="py-4 font-medium text-gray-900"><%= caregiver.full_name %></td>
                                             <td class="py-4 text-gray-600">
                                                 <a href="mailto:<%= caregiver.email %>" class="text-blue-600 hover:text-blue-700"><%= caregiver.email %></a>
                                             </td>
                                             <td class="py-4 text-gray-600">
                                                 <a href="tel:<%= caregiver.phone %>" class="text-blue-600 hover:text-blue-700"><%= caregiver.phone %></a>
                                             </td>
-                                            <td class="py-4 text-gray-600"><%= caregiver.experience_years %> years</td>
-                                            <td class="py-4 text-gray-600"><%= caregiver.service_areas %></td>
-                                            <td class="py-4 text-gray-600"><%= caregiver.availability %></td>
+                                            <td class="py-4 text-gray-600"><%= caregiver.experience_years ? caregiver.experience_years + ' years' : 'Not specified' %></td>
+                                            <td class="py-4 text-gray-600"><%= caregiver.willing_regions || caregiver.base_location %></td>
+                                            <td class="py-4 text-gray-600"><%= caregiver.availability_notes || 'Not specified' %></td>
                                             <td class="py-4">
                                                 <% if (caregiver.is_duplicate) { %>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">

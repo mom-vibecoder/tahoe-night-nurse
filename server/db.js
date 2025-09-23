@@ -253,9 +253,17 @@ class DatabaseManager {
       WHERE created_at > datetime('now', '-7 days')
     `).get();
 
+    const totalSubmissions = parentCount.count + caregiverCount.count;
+    const supplyDemandRatio = parentCount.count > 0 ? Math.round((caregiverCount.count / parentCount.count) * 100) : 0;
+
     return {
       totalParents: parentCount.count,
       totalCaregivers: caregiverCount.count,
+      parentsThisWeek: recentParents.count,
+      caregiversThisWeek: recentCaregivers.count,
+      totalSubmissions: totalSubmissions,
+      supplyDemandRatio: supplyDemandRatio,
+      // Keep old names for backward compatibility
       recentParents: recentParents.count,
       recentCaregivers: recentCaregivers.count
     };

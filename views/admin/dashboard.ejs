@@ -133,10 +133,10 @@
                                         <% if (recentParents && recentParents.length > 0) { %>
                                             <% recentParents.forEach(parent => { %>
                                             <tr class="border-t border-gray-100">
-                                                <td class="py-3 text-gray-600"><%= parent.created_at_formatted %></td>
-                                                <td class="py-3 font-medium text-gray-900"><%= parent.first_name %> <%= parent.last_name %></td>
+                                                <td class="py-3 text-gray-600"><%= new Date(parent.created_at).toLocaleDateString() %></td>
+                                                <td class="py-3 font-medium text-gray-900"><%= parent.full_name %></td>
                                                 <td class="py-3 text-gray-600"><%= parent.location %></td>
-                                                <td class="py-3 text-gray-600"><%= parent.timeframe %></td>
+                                                <td class="py-3 text-gray-600"><%= parent.start_timeframe %></td>
                                             </tr>
                                             <% }); %>
                                         <% } else { %>
@@ -173,10 +173,10 @@
                                         <% if (recentCaregivers && recentCaregivers.length > 0) { %>
                                             <% recentCaregivers.forEach(caregiver => { %>
                                             <tr class="border-t border-gray-100">
-                                                <td class="py-3 text-gray-600"><%= caregiver.created_at_formatted %></td>
-                                                <td class="py-3 font-medium text-gray-900"><%= caregiver.first_name %> <%= caregiver.last_name %></td>
-                                                <td class="py-3 text-gray-600"><%= caregiver.experience_years %> years</td>
-                                                <td class="py-3 text-gray-600"><%= caregiver.service_areas %></td>
+                                                <td class="py-3 text-gray-600"><%= new Date(caregiver.created_at).toLocaleDateString() %></td>
+                                                <td class="py-3 font-medium text-gray-900"><%= caregiver.full_name %></td>
+                                                <td class="py-3 text-gray-600"><%= caregiver.experience_years ? caregiver.experience_years + ' years' : 'Not specified' %></td>
+                                                <td class="py-3 text-gray-600"><%= caregiver.willing_regions || caregiver.base_location %></td>
                                             </tr>
                                             <% }); %>
                                         <% } else { %>

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= title %></title>
-    <meta name="description" content="Parent leads management for Tahoe Night Nanny">
+    <meta name="description" content="Newsletter subscription management for Tahoe Night Nanny">
     
     <!-- Google Fonts - Lato -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,21 +17,12 @@
         tailwind.config = {
             theme: {
                 extend: {
-                    fontFamily: {
-                        'sans': ['Lato', 'system-ui', 'sans-serif'],
-                    },
                     colors: {
                         'navy': {
-                            50: '#f8fafc',
-                            100: '#f1f5f9',
-                            200: '#e2e8f0',
-                            300: '#cbd5e1',
-                            400: '#94a3b8',
-                            500: '#64748b',
-                            600: '#475569',
-                            700: '#334155',
-                            800: '#1e293b',
-                            900: '#0f172a',
+                            '800': '#1e3a8a',
+                            '900': '#1e40af',
+                            '700': '#1d4ed8',
+                            '300': '#93c5fd'
                         }
                     }
                 }
@@ -61,13 +52,13 @@
                 <a href="/admin" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
                     <span>Dashboard</span>
                 </a>
-                <a href="/admin/parents" class="flex items-center px-6 py-3 text-white bg-navy-700 border-r-4 border-blue-500">
+                <a href="/admin/parents" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
                     <span>Parent Leads</span>
                 </a>
                 <a href="/admin/caregivers" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
                     <span>Caregivers</span>
                 </a>
-                <a href="/admin/newsletter" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
+                <a href="/admin/newsletter" class="flex items-center px-6 py-3 text-white bg-navy-700 border-r-4 border-blue-500">
                     <span>Newsletter</span>
                 </a>
                 <a href="/" target="_blank" class="flex items-center px-6 py-3 text-navy-300 hover:text-white hover:bg-navy-700 transition-colors">
@@ -80,32 +71,40 @@
         <div class="flex-1">
             <div class="p-8">
                 <div class="flex justify-between items-center mb-8">
-                    <h1 class="text-3xl font-light text-gray-800">Parent Leads</h1>
-                    <a href="/admin/export/parents" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors text-sm font-medium">
+                    <h1 class="text-3xl font-light text-gray-800">Newsletter Subscriptions</h1>
+                    <a href="/api/export?type=newsletter" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors font-medium">
                         Export CSV
                     </a>
                 </div>
                 
-                <!-- Stats Summary -->
+                <!-- Stats Cards -->
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                    <!-- Total Subscribers -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <div class="text-2xl font-light text-blue-600 mb-2"><%= totalParents || 0 %></div>
-                        <div class="text-gray-600 font-medium">Total Parent Leads</div>
+                        <div class="text-3xl font-light text-blue-600 mb-2"><%= stats.totalSubscribers || 0 %></div>
+                        <div class="text-gray-600 font-medium">Total Subscribers</div>
+                        <div class="text-sm text-gray-500 mt-1"><%= stats.subscribersThisWeek || 0 %> this week</div>
                     </div>
+                    
+                    <!-- This Week -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <div class="text-2xl font-light text-green-600 mb-2"><%= parentsThisWeek || 0 %></div>
+                        <div class="text-3xl font-light text-green-600 mb-2"><%= stats.subscribersThisWeek || 0 %></div>
                         <div class="text-gray-600 font-medium">This Week</div>
+                        <div class="text-sm text-gray-500 mt-1">New subscribers</div>
                     </div>
+                    
+                    <!-- This Month -->
                     <div class="bg-white rounded-lg shadow-sm p-6">
-                        <div class="text-2xl font-light text-purple-600 mb-2"><%= parentsThisMonth || 0 %></div>
+                        <div class="text-3xl font-light text-purple-600 mb-2"><%= stats.subscribersThisMonth || 0 %></div>
                         <div class="text-gray-600 font-medium">This Month</div>
+                        <div class="text-sm text-gray-500 mt-1">New subscribers</div>
                     </div>
                 </div>
 
-                <!-- Parent Leads Table -->
+                <!-- Newsletter Subscribers Table -->
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="p-6 border-b border-gray-200">
-                        <h2 class="text-xl font-medium text-gray-800">All Parent Leads</h2>
+                        <h2 class="text-xl font-medium text-gray-800">All Newsletter Subscribers</h2>
                     </div>
                     <div class="p-6">
                         <div class="overflow-x-auto">
@@ -113,52 +112,34 @@
                                 <thead>
                                     <tr class="text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                         <th class="pb-3">Date</th>
-                                        <th class="pb-3">Name</th>
                                         <th class="pb-3">Email</th>
-                                        <th class="pb-3">Phone</th>
-                                        <th class="pb-3">Location</th>
-                                        <th class="pb-3">Timeframe</th>
-                                        <th class="pb-3">Children</th>
                                         <th class="pb-3">Status</th>
                                     </tr>
                                 </thead>
                                 <tbody class="text-sm">
-                                    <% if (parents && parents.length > 0) { %>
-                                        <% parents.forEach(parent => { %>
+                                    <% if (subscribers && subscribers.length > 0) { %>
+                                        <% subscribers.forEach(subscriber => { %>
                                         <tr class="border-t border-gray-100 hover:bg-gray-50">
-                                            <td class="py-4 text-gray-600"><%= new Date(parent.created_at).toLocaleDateString() %></td>
-                                            <td class="py-4 font-medium text-gray-900"><%= parent.full_name %></td>
+                                            <td class="py-4 text-gray-600"><%= new Date(subscriber.created_at).toLocaleDateString() %></td>
                                             <td class="py-4 text-gray-600">
-                                                <a href="mailto:<%= parent.email %>" class="text-blue-600 hover:text-blue-700"><%= parent.email %></a>
+                                                <a href="mailto:<%= subscriber.email %>" class="text-blue-600 hover:text-blue-700"><%= subscriber.email %></a>
                                             </td>
-                                            <td class="py-4 text-gray-600">
-                                                <a href="tel:<%= parent.phone %>" class="text-blue-600 hover:text-blue-700"><%= parent.phone %></a>
-                                            </td>
-                                            <td class="py-4 text-gray-600"><%= parent.location %></td>
-                                            <td class="py-4 text-gray-600"><%= parent.start_timeframe %></td>
-                                            <td class="py-4 text-gray-600"><%= parent.due_or_age %></td>
                                             <td class="py-4">
-                                                <% if (parent.is_duplicate) { %>
-                                                <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                                    Duplicate
-                                                </span>
-                                                <% } else { %>
                                                 <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                                    New
+                                                    Active
                                                 </span>
-                                                <% } %>
                                             </td>
                                         </tr>
                                         <% }); %>
                                     <% } else { %>
                                     <tr>
-                                        <td colspan="8" class="py-12 text-center text-gray-500">
+                                        <td colspan="3" class="py-12 text-center text-gray-500">
                                             <div class="flex flex-col items-center">
                                                 <svg class="w-12 h-12 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
                                                 </svg>
-                                                <p class="text-lg font-medium text-gray-600 mb-2">No parent leads yet</p>
-                                                <p class="text-gray-500">Parent leads will appear here once they submit the form</p>
+                                                <p class="text-lg font-medium text-gray-600 mb-2">No newsletter subscribers yet</p>
+                                                <p class="text-gray-500">Newsletter signups will appear here once users subscribe</p>
                                             </div>
                                         </td>
                                     </tr>

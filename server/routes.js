@@ -282,6 +282,17 @@ router.get('/admin/caregivers', (req, res) => {
   });
 });
 
+router.get('/admin/newsletter', (req, res) => {
+  const stats = database.getNewsletterStats();
+  const subscribers = database.getAllNewsletter();
+
+  res.render('admin/newsletter', {
+    title: 'Newsletter Subscriptions - Admin - Tahoe Night Nanny',
+    stats,
+    subscribers
+  });
+});
+
 // CSV export routes (admin only)
 router.get('/admin/export/parents', async (req, res) => {
   try {

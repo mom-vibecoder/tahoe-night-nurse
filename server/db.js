@@ -241,6 +241,24 @@ class DatabaseManager {
     return stmt.all();
   }
 
+  getNewsletterStats() {
+    const totalCount = this.db.prepare('SELECT COUNT(*) as count FROM newsletter').get();
+    const thisWeekCount = this.db.prepare(`
+      SELECT COUNT(*) as count FROM newsletter
+      WHERE created_at > datetime('now', '-7 days')
+    `).get();
+    const thisMonthCount = this.db.prepare(`
+      SELECT COUNT(*) as count FROM newsletter
+      WHERE created_at > datetime('now', '-30 days')
+    `).get();
+
+    return {
+      totalSubscribers: totalCount.count,
+      subscribersThisWeek: thisWeekCount.count,
+      subscribersThisMonth: thisMonthCount.count
+    };
+  }
+
   getStats() {
     const parentCount = this.db.prepare('SELECT COUNT(*) as count FROM parents_leads').get();
     const caregiverCount = this.db.prepare('SELECT COUNT(*) as count FROM caregiver_applications').get();

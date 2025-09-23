@@ -173,7 +173,7 @@ Hi ${data.full_name.split(' ')[0]},
 
 Thanks for joining the Tahoe Night Nanny priority list! 
 
-We're building a trusted network of certified night nurses right here in the Lake Tahoe region, and you're among the first to know when we launch.
+We're building a trusted network of certified night nannies right here in the Lake Tahoe region, and you're among the first to know when we launch.
 
 What happens next?
 • We'll keep you updated on our progress
@@ -195,7 +195,7 @@ P.S. Feel free to forward this to other parents who might be interested!
       
       <p>Thanks for joining the Tahoe Night Nanny priority list!</p>
       
-      <p>We're building a trusted network of certified night nurses right here in the Lake Tahoe region, and you're among the first to know when we launch.</p>
+      <p>We're building a trusted network of certified night nannies right here in the Lake Tahoe region, and you're among the first to know when we launch.</p>
       
       <h3>What happens next?</h3>
       <ul>

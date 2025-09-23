@@ -63,9 +63,7 @@ class DatabaseManager {
         phone TEXT NOT NULL,
         base_location TEXT NOT NULL CHECK(length(base_location) >= 2 AND length(base_location) <= 120),
         willing_regions TEXT NOT NULL,
-        experience_years TEXT NOT NULL CHECK(
-          experience_years IN ('<1', '1-2', '2-5', '5+')
-        ),
+        experience_years INTEGER CHECK(experience_years >= 0 AND experience_years <= 50),
         certifications TEXT NOT NULL,
         availability_notes TEXT CHECK(length(availability_notes) <= 280),
         experience_summary TEXT CHECK(length(experience_summary) <= 600),
@@ -143,7 +141,7 @@ class DatabaseManager {
       data.phone,
       data.location || null, // base_location = location from form
       willingRegions, // willing_regions = same as location for now
-      data.years_experience || null, // experience_years = years_experience from form
+      data.years_experience ? parseInt(data.years_experience) : null, // experience_years = years_experience from form
       certifications,
       data.availability || null, // availability_notes = availability from form  
       data.notes || null, // experience_summary = notes from form

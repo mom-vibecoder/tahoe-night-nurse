@@ -132,23 +132,21 @@ class DatabaseManager {
     `);
 
     const isDuplicate = this.checkDuplicate('caregiver_applications', data.email);
-    const willingRegions = Array.isArray(data.willing_regions)
-      ? data.willing_regions.join(',')
-      : data.willing_regions;
-    const certifications = Array.isArray(data.certifications)
-      ? data.certifications.join(',')
-      : data.certifications;
+    const willingRegions = data.location || null; // Use single location from dropdown
+    const certifications = Array.isArray(data.certs)
+      ? data.certs.join(',')
+      : data.certs;
 
     const result = stmt.run(
       data.full_name,
       data.email.toLowerCase(),
       data.phone,
-      data.base_location,
-      willingRegions,
-      data.experience_years,
+      data.location || null, // base_location = location from form
+      willingRegions, // willing_regions = same as location for now
+      data.years_experience || null, // experience_years = years_experience from form
       certifications,
-      data.availability_notes || null,
-      data.experience_summary || null,
+      data.availability || null, // availability_notes = availability from form  
+      data.notes || null, // experience_summary = notes from form
       data.user_agent || null,
       data.ip_addr || null,
       isDuplicate ? 1 : 0

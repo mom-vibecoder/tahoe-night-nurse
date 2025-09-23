@@ -69,35 +69,24 @@ const caregiverApplicationValidation = [
     .matches(/^[\d\s\-\(\)\+\.]+$/)
     .withMessage('Please provide a valid phone number'),
 
-  body('base_location')
+  body('location')
     .trim()
-    .isLength({ min: 2, max: 120 })
-    .withMessage('Base location must be between 2 and 120 characters'),
+    .isIn(['South Lake Tahoe', 'North Lake Tahoe', 'Truckee', 'Other Tahoe Area'])
+    .withMessage('Please select a valid location'),
 
-  body('willing_regions')
-    .isArray({ min: 1 })
-    .withMessage('Please select at least one region you\'re willing to serve'),
+  body('years_experience')
+    .optional({ checkFalsy: true })
+    .isInt({ min: 0, max: 50 })
+    .withMessage('Years of experience must be a number between 0 and 50'),
 
-  body('experience_years')
-    .trim()
-    .isIn(['<1', '1-2', '2-5', '5+'])
-    .withMessage('Please select your years of experience'),
-
-  body('certifications')
+  body('certs')
     .isArray({ min: 1 })
     .withMessage('Please select at least one certification'),
 
-  body('availability_notes')
-    .optional({ checkFalsy: true })
+  body('availability')
     .trim()
-    .isLength({ max: 280 })
-    .withMessage('Availability notes must be less than 280 characters'),
-
-  body('experience_summary')
-    .optional({ checkFalsy: true })
-    .trim()
-    .isLength({ max: 600 })
-    .withMessage('Experience summary must be less than 600 characters'),
+    .isIn(['Primarily weeknights', 'Primarily weekends', 'Open to both weeknights and weekends', 'Very flexible - open to discuss'])
+    .withMessage('Please select a valid availability preference'),
 
   body('_hp')
     .isEmpty()

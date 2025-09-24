@@ -64,6 +64,7 @@ router.get('/', serveHTML('home.html'));
 router.get('/parents', serveHTML('parents.html'));
 router.get('/caregivers', serveHTML('caregivers.html'));
 router.get('/thank-you', serveHTML('thank-you.html'));
+router.get('/privacy', serveHTML('privacy.html'));
 
 // Middleware to combine first_name and last_name into full_name
 const combineNames = (req, res, next) => {

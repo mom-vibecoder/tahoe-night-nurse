@@ -1,8 +1,10 @@
 const formData = require('form-data');
 const Mailgun = require('mailgun.js');
+const nodemailer = require('nodemailer');
 
 class EmailService {
   constructor() {
+    // Priority: Mailgun > Gmail SMTP > Console
     if (process.env.MAILGUN_API_KEY && process.env.MAILGUN_DOMAIN) {
       const mailgun = new Mailgun(formData);
       this.mg = mailgun.client({
@@ -12,10 +14,25 @@ class EmailService {
       });
       this.domain = process.env.MAILGUN_DOMAIN;
       this.provider = 'mailgun';
+      console.log('📧 Email service initialized: Mailgun');
+    } else if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
+      this.transporter = nodemailer.createTransport({
+        host: process.env.SMTP_HOST,
+        port: process.env.SMTP_PORT || 587,
+        secure: process.env.SMTP_PORT === '465', // true for 465, false for other ports
+        auth: {
+          user: process.env.SMTP_USER,
+          pass: process.env.SMTP_PASS
+        }
+      });
+      this.provider = 'smtp';
+      console.log('📧 Email service initialized: SMTP');
     } else {
       this.provider = 'console';
       if (process.env.NODE_ENV === 'production') {
         console.warn('⚠️  Email service not configured. Using console output.');
+      } else {
+        console.log('📧 Email service initialized: Console (development)');
       }
     }
   }
@@ -77,13 +94,26 @@ class EmailService {
       return { success: true, provider: 'console' };
     }
 
-    try {
-      const result = await this.mg.messages.create(this.domain, msg);
-      console.log('✅ Email sent via Mailgun:', result.id);
-      return { success: true, id: result.id, provider: 'mailgun' };
-    } catch (error) {
-      console.error('❌ Email send failed:', error);
-      throw error;
+    if (this.provider === 'mailgun') {
+      try {
+        const result = await this.mg.messages.create(this.domain, msg);
+        console.log('✅ Email sent via Mailgun:', result.id);
+        return { success: true, id: result.id, provider: 'mailgun' };
+      } catch (error) {
+        console.error('❌ Mailgun send failed:', error);
+        throw error;
+      }
+    }
+
+    if (this.provider === 'smtp') {
+      try {
+        const result = await this.transporter.sendMail(msg);
+        console.log('✅ Email sent via SMTP:', result.messageId);
+        return { success: true, id: result.messageId, provider: 'smtp' };
+      } catch (error) {
+        console.error('❌ SMTP send failed:', error);
+        throw error;
+      }
     }
   }
 

@@ -37,23 +37,32 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         command_timeout: 10m
         script: |
+          # Prepare new app directory
+          cd /root/app-new
+          echo "PORT=3000" > .env
+          echo "NODE_ENV=production" >> .env
+          mkdir -p data
+
+          # Stop service before swap
+          systemctl stop tahoe-night-nurse || true
+
           # Swap directories
           rm -rf /root/app-old
           mv /root/app /root/app-old 2>/dev/null || true
           mv /root/app-new /root/app
 
-          cd /root/app
-          npm install
-          echo "PORT=3000" > .env
-          mkdir -p data
-
-          # Restart service
-          systemctl restart tahoe-night-nurse
+          # Reload systemd and start service
+          systemctl daemon-reload
+          systemctl start tahoe-night-nurse
           sleep 3
 
           if systemctl is-active --quiet tahoe-night-nurse; then
             echo "✅ Deployment successful"
           else
-            journalctl -u tahoe-night-nurse -n 20 --no-pager
+            echo "❌ Service failed to start. Logs:"
+            journalctl -u tahoe-night-nurse -n 50 --no-pager
+            echo ""
+            echo "Service status:"
+            systemctl status tahoe-night-nurse --no-pager || true
             exit 1
           fi

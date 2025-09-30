@@ -6,8 +6,8 @@ After=network.target
 Type=simple
 User=root
 WorkingDirectory=/root/app
+EnvironmentFile=-/root/app/.env
 Environment=NODE_ENV=production
-Environment=PORT=3000
 ExecStart=/usr/bin/node server/index.js
 Restart=always
 RestartSec=10

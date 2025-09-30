@@ -14,31 +14,28 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        command_timeout: 15m
+        command_timeout: 20m
         script: |
-          # Kill existing
+          set -e
+          cd /root/app || {
+            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/app
+            cd /root/app
+          }
+
+          # Stop app
           pkill -f "node server/index.js" || true
 
-          # Get fresh code
-          cd /root/app 2>/dev/null || git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/app
-          cd /root/app
-          git fetch origin
-          git reset --hard origin/main
+          # Update code
+          git pull origin main
 
-          # Install Node.js if needed
-          if ! command -v node &> /dev/null; then
-            curl -fsSL https://deb.nodesource.com/setup_lts.x | sudo -E bash -
-            apt-get install -y nodejs
-          fi
+          # Install deps
+          npm install --production
 
-          # Install dependencies
-          npm ci --production
-          
-          # Basic env
+          # Setup
           echo "PORT=3000" > .env
           mkdir -p data
-          
-          # Start
-          nohup node server/index.js > /dev/null 2>&1 &
-          
-          echo "Done"
+
+          # Start in background
+          nohup node server/index.js > /root/app/app.log 2>&1 &
+
+          echo "Deployment complete"

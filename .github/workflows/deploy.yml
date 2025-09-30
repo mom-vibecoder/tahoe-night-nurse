@@ -8,34 +8,52 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-    - name: Deploy
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Deploy to server
+      uses: appleboy/scp-action@v0.1.7
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        source: "."
+        target: "/root/app-new"
+        rm: true
+
+    - name: Setup and start
       uses: appleboy/ssh-action@v1.0.3
       with:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        command_timeout: 20m
+        command_timeout: 10m
         script: |
-          set -e
-          cd /root/app || {
-            git clone https://github.com/mom-vibecoder/tahoe-night-nurse.git /root/app
-            cd /root/app
-          }
-
-          # Stop app
+          # Stop old app
           pkill -f "node server/index.js" || true
 
-          # Update code
-          git pull origin main
+          # Swap directories
+          rm -rf /root/app-old
+          mv /root/app /root/app-old 2>/dev/null || true
+          mv /root/app-new /root/app
 
-          # Install deps
+          cd /root/app
+
+          # Install dependencies
           npm install --production
 
-          # Setup
+          # Setup env
           echo "PORT=3000" > .env
           mkdir -p data
 
-          # Start in background
+          # Start app
           nohup node server/index.js > /root/app/app.log 2>&1 &
 
-          echo "Deployment complete"
+          # Verify it started
+          sleep 2
+          if pgrep -f "node server/index.js" > /dev/null; then
+            echo "✅ Deployment successful"
+          else
+            echo "❌ App failed to start, check /root/app/app.log"
+            exit 1
+          fi

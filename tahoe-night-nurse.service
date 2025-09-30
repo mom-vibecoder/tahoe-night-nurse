@@ -1,0 +1,19 @@
+[Unit]
+Description=Tahoe Night Nurse Application
+After=network.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/app
+Environment=NODE_ENV=production
+Environment=PORT=3000
+ExecStart=/usr/bin/node server/index.js
+Restart=always
+RestartSec=10
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=tahoe-night-nurse
+
+[Install]
+WantedBy=multi-user.target

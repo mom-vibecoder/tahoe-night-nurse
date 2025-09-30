@@ -37,31 +37,23 @@ jobs:
         key: ${{ secrets.SSH_KEY }}
         command_timeout: 10m
         script: |
-          # Stop old app
-          pkill -f "node server/index.js" || true
-          sleep 1
-
           # Swap directories
           rm -rf /root/app-old
           mv /root/app /root/app-old 2>/dev/null || true
           mv /root/app-new /root/app
 
           cd /root/app
-
-          # Setup env
+          npm install
           echo "PORT=3000" > .env
           mkdir -p data
 
-          # Start app (fully detach stdin)
-          nohup node server/index.js < /dev/null > /root/app/app.log 2>&1 &
-
-          # Verify it started
+          # Restart service
+          systemctl restart tahoe-night-nurse
           sleep 3
-          if pgrep -f "node server/index.js" > /dev/null; then
+
+          if systemctl is-active --quiet tahoe-night-nurse; then
             echo "✅ Deployment successful"
-            exit 0
           else
-            echo "❌ App failed to start"
-            tail -20 /root/app/app.log 2>/dev/null || echo "No log file"
+            journalctl -u tahoe-night-nurse -n 20 --no-pager
             exit 1
           fi

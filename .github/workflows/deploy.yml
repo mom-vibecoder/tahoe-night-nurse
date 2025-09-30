@@ -35,7 +35,7 @@ jobs:
         host: ${{ secrets.HOST }}
         username: ${{ secrets.USERNAME }}
         key: ${{ secrets.SSH_KEY }}
-        command_timeout: 5m
+        command_timeout: 10m
         script: |
           # Stop old app
           pkill -f "node server/index.js" || true
@@ -52,11 +52,11 @@ jobs:
           echo "PORT=3000" > .env
           mkdir -p data
 
-          # Start app
-          nohup node server/index.js > /root/app/app.log 2>&1 &
+          # Start app (fully detach stdin)
+          nohup node server/index.js < /dev/null > /root/app/app.log 2>&1 &
 
           # Verify it started
-          sleep 2
+          sleep 3
           if pgrep -f "node server/index.js" > /dev/null; then
             echo "✅ Deployment successful"
             exit 0
